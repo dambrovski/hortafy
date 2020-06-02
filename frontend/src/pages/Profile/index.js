@@ -2,35 +2,37 @@ import React, { useState, useEffect } from 'react';
 import './styles.css';
 import { Link, useHistory } from 'react-router-dom';
 
-import logoImg from '../../assets/logo.svg';
+import logoImg from '../../assets/hortafy-logo.svg';
 import {FiPower} from 'react-icons/fi'
 import {FiTrash2} from 'react-icons/fi'
 
 import api from '../../services/api';
 
 export default function Profile(){
-    const [incidents, setIncidents] = useState([]);
+    const [kits, setKits] = useState([]);
+    //const [incidents, setIncidents] = useState([]);
     const history = useHistory();
-    const ongId = localStorage.getItem('ongId');
-    const ongName = localStorage.getItem('ongName');
+    const idCliente = localStorage.getItem('idCliente');
+    const emailCliente = localStorage.getItem('emailCliente');
     useEffect(() =>{
-        api.get('profile', {
+        api.get('clients', {
             headers:{
-                Authorization: ongId,
+                Authorization: idCliente,
             }
         }).then(response => {
-            setIncidents(response.data);
+            console.log("pesquisando kits..");
+            setKits(response.data);
         })
-    }, [ongId]);
+    }, [idCliente]);
 
     async function handleDeleteIncident(id) {
         try {
-          await api.delete(`incidents/${id}`, {
+          await api.delete(`kits/${id}`, {
               headers: {
-                  Authorization: ongId,                  
+                  Authorization: idCliente,                  
               }
           });
-          setIncidents(incidents.filter(incident => incident.id !== id));
+          setKits(kits.filter(kit => kit.id !== id));
         } catch (error) {
             alert('Erro ao deletar caso, tente novamente.');
         }
@@ -46,26 +48,26 @@ export default function Profile(){
         <div className="profile-container">
             <header>
                 <img src={logoImg} alt=""/>
-                <span>Bem vinda, {ongName}!</span>
-                <Link className="button" to="/incidents/new">Cadastrar novo caso</Link>
+                <span>Bem vindo(a), {emailCliente}!</span>
+                <Link className="button" to="/kits">Buscar Produtos</Link>
                 <button onClick={handleLogout} type="button">
                     <FiPower size={18} color="#E02041" />
                 </button>
             </header>
 
-            <h1>Casos cadastrados</h1>
+            <h1>Kits</h1>
             <ul>
-                {incidents.map(incident => (
-                    <li key={incident.id}>
-                    <strong>CASO:</strong>
-                    <p>{incident.title}</p>
+                {kits.map(kit => (
+                    <li key={kit.idKit}>
+                    <strong>Kit:</strong>
+                    <p>{kit.descricaoKit}</p>
 
-                    <strong>DESCRIÇÃO</strong>
-                    <p>{incident.description}</p>
+                    <strong>ID PRODUTOR</strong>
+                    <p>{kit.idProdutorFK}</p>
 
                     <strong>VALOR:</strong>
-                <p>{Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL'}).format(incident.value)}</p>
-                    <button onClick={() => handleDeleteIncident(incident.id)} type="button" >
+                <p>{Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL'}).format(kit.precoKit)}</p>
+                    <button onClick={() => handleDeleteIncident(kit.idKit)} type="button" >
                         <FiTrash2  size={20} color="a8a8b3"/>
                     </button>
                 </li>   

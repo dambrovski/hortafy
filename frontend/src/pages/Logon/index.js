@@ -6,7 +6,7 @@ import { FiUser } from 'react-icons/fi'
 import './styles.css';
 
 import logoImg from '../../assets/hortafy-logo.svg';
-import heroesImg from '../../assets/heroes.png';
+
 import api from '../../services/api'
 
 export default function Logon() {
@@ -15,14 +15,32 @@ export default function Logon() {
     const history = useHistory();
     async function handleLogin(e) {
         e.preventDefault();
+
+        const data = {
+            email,
+            senha,
+
+        };
         
         try {
+            console.log("tentativa de login...")
             console.log(email);
-            const response = await api.post('sessions', {email});
-            console.log(response.data)
+            const response = await api.post('sessions', data);
+            
+            if(response.data == null){
+                alert('Email ou senha incorreta!')
+            }
+            else{
+                
+                localStorage.setItem('idCliente', response.data[0].idCliente);
+                localStorage.setItem('emailCliente', response.data[0].email);
+                
+                history.push('/profile');
+            }
+            
             //localStorage.setItem('ongId', id);
             //localStorage.setItem('ongName', response.data.name);
-            //history.push('/profile');
+            
         } catch (error) {
             alert('Falha no login, tente novamente.')
             
@@ -44,11 +62,11 @@ export default function Logon() {
                     />  
                     <button className="button" type="submit">Entrar</button>
                     
-                    <Link className="back-link" to="/registerClient">
-                        <FiUser size={20} color="#59A52C" />
+                    <Link className="back-link-client" to="/registerClient">
+                        <FiUser size={16} color="#59A52C" />
                         Quero ser cliente!
-                        <Link className="back-link" to="/registerProducer">
-                        <FiTruck size={20} color="#E3992A" />
+                        <Link className="back-link-producer" to="/registerProducer">
+                        <FiTruck size={16} color="#E3992A" />
                         Quero ser um Vendedor!
                     </Link>
                     </Link>

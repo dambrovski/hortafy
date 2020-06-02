@@ -20,7 +20,7 @@ module.exports = {
     create(req, res){
         console.log("criei a sessão");
         const {email,senha} = req.body;
-        console.log(email);
+        console.log(senha);
         console.log(email);
         filter = " WHERE email= '";
         
@@ -28,13 +28,14 @@ module.exports = {
         console.log("cheguei aqui filter")
         
         
-        query("SELECT * FROM cliente" + filter + email + "'", function (error, result, field) {
+        query("SELECT * FROM cliente" + filter + email + "'" + "AND senha='" + senha + "'", function (error, result, field) {
             console.log(result);
-            if (error) {
+            if (result.length < 1) {
                     res.json(error);
-                    console.log("erro blz");
+                    console.log("erro blz senha ou login, sei la");
             } else {
                 res.json(result);
+                console.log("achei pelo menos um aqui");
             }
         });
     }

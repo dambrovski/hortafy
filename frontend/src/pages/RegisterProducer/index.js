@@ -51,11 +51,13 @@ export default function Register(){
             <div className="content">
                 
                 <form onSubmit={handleRegister}>
-                <section>
-                    <Link className="back-link" to="/">
+
+                <Link className="back-link" to="/">
                         <FiArrowLeft size={16} color="#E3992A" />
                         Home
                     </Link>
+                <section>
+                    
                     <img src={logoImg} alt="Be The Hero"/>
                     
                     </section>
@@ -64,11 +66,6 @@ export default function Register(){
                     <input placeholder="Email" 
                     value={email}
                     onChange={e => setEmail(e.target.value)}
-                    />
-
-                    <input type="text" placeholder="Cartão de Crédito" 
-                    value={cartaoCredito}
-                    onChange={e => setcartaoCredito(e.target.value)}
                     />
 
                     <input placeholder="Senha" type="password" 

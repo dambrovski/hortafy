@@ -17,6 +17,7 @@
 
 .logon-container section.form form{
     margin-top: 0px;
+    margin-left: 20px;
 }
 .logon-container section.form form h1{
     font-size: 32px;
@@ -27,11 +28,60 @@
 .logon-container section.form img{
     
     align-items: center;
-    margin-left: 5px;
+    
     margin-bottom: 8px;
 }
+.back-link{
+    display: inline-flex;
+    
+    margin-top: 10px;
+    color: #41414d;
+    font-size: 10px;
+    
+    font-weight: 500;
+    transition: opacity 0.2s;
 
-.back-link {
-    margin-left: 35px;
-    align-items: flex-end;
+}
+
+.back-link-client svg{
+    margin-right: 8px;
+    display: flex;
+}
+
+.back-link-client:hover{
+    opacity: 0.8;
+}
+
+.back-link-client{
+    display: flex;
+    
+    margin-top: 10px;
+    color: #41414d;
+    font-size: 18px;
+    
+    font-weight: 500;
+    transition: opacity 0.2s;
+
+}
+
+.back-link-producer svg{
+    margin-right: 8px;
+    display: flex;
+}
+
+.back-link-producer:hover{
+    opacity: 0.8;
+}
+
+
+.back-link-producer{
+    display: flex;
+    
+    margin-top: 10px;
+    color: #41414d;
+    font-size: 18px;
+    
+    font-weight: 500;
+    transition: opacity 0.2s;
+
 }

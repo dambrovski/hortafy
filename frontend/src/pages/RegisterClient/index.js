@@ -9,7 +9,6 @@ import {FiArrowLeft} from 'react-icons/fi';
 
 export default function Register(){
     const [email, setEmail] = useState('');
-    const [cartaoCredito, setcartaoCredito] = useState('');
     const [senha, setSenha] = useState('');
     
 
@@ -20,15 +19,19 @@ export default function Register(){
         
         const data = {
             email,
-            cartaoCredito,
             senha,
 
         };
         try {
-            console.log("chamaram")
+            
+            console.log("chamaram cadastro cliente front")
             const response = await api.post('clients', data);
+            
+            console.log("vortei")
+            console.log(response.data);
+            
             //alert(`Seu ID de acesso: ${response.data.idCliente}`);
-            if (response.data.length > 1){
+            if (response.data == true){
                 alert(`Email já está cadastrado!.`);
                 
             }
@@ -65,10 +68,6 @@ export default function Register(){
                     onChange={e => setEmail(e.target.value)}
                     />
 
-                    <input type="text" placeholder="Cartão de Crédito" 
-                    value={cartaoCredito}
-                    onChange={e => setcartaoCredito(e.target.value)}
-                    />
 
                     <input placeholder="Senha" type="password" 
                     value={senha}

@@ -17,25 +17,32 @@ module.exports = {
     create(req, res){
         
         const {email, cartaoCredito, instituicaoCaridosa, admin, senha} = req.body;
-        
+        clienteExiste = true;
         filter = " WHERE email= '" + email;        
-        teste = query("SELECT * FROM cliente" + filter + "'", function (error, result, field) {
-            if (error) {
-
+        query("SELECT * FROM cliente" + filter + "'", function (error, result, field) {
+            console.log(result);
+            if (result.length < 1){
                 query(`INSERT INTO cliente 
                 (email, cartaoCredito, instituicaoCaridosa, admin, senha) 
                 VALUES 
                 ('${email}', '${cartaoCredito}', '${instituicaoCaridosa}', '${admin}', '${senha}')`,
                 function (error, result, field) {
                     if (error) {
-                        res.json(error);
+                        clienteExiste = true;
+                        res.json(clienteExiste);
+                        //res.json(error);
                     } else {
-                        res.json(result);
+                        clienteExiste = false;
+                        res.json(clienteExiste);
                     }
             })
             } else {
                 console.log("existe na base");
-                res.json(result);
+                clienteExiste = true;
+                res.json(clienteExiste);
+                
+                
+
             }
         });
         
