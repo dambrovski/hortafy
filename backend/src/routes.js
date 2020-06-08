@@ -6,7 +6,9 @@ const ProducerController = require('./controllers/ProducerController');
 const ProductController = require('./controllers/ProductController');
 const KitController = require('./controllers/KitController');
 const OrderController = require('./controllers/OrderController');
+const ChartController = require('./controllers/ChartController');
 const SessionController = require('./controllers/SessionController');
+
 
 const routes = express.Router();
 
@@ -23,7 +25,11 @@ routes.post('/products', ProductController.create);
 
 
 routes.get('/kits/producer', KitController.indexByProducer);
-routes.get('/kits/:idKit', KitController.index);
+routes.get('/kits/list/:idKit', KitController.indexFull);
+routes.get('/kits/list', KitController.indexFull);
+
+routes.get('/kits', KitController.index);
+//routes.get('/kits/:idKit', KitController.index);
 routes.post('/kits', KitController.create);
 
 routes.get('/orders', OrderController.index);    
@@ -31,10 +37,15 @@ routes.get('/orders/producer', OrderController.indexByProducer);
 routes.get('/orders/:idOrder', OrderController.index);
 routes.post('/orders', OrderController.create);
 
+routes.get('/charts', ChartController.index);    
+routes.post('/charts', ChartController.create);
+
+
 routes.get('/sessions', SessionController.index);
 routes.post('/sessions', SessionController.create);
 
 
 module.exports = routes;
+
 
 
