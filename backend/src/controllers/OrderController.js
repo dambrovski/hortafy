@@ -22,6 +22,25 @@ module.exports = {
         });
     },
 
+    
+    indexByClient(req, res){
+        const idCliente = req.headers.authorization;
+        console.log(idCliente);
+        console.log("called order controller");
+        let filter = '';
+        if(idCliente) filter = ' WHERE a.idClienteFK =' + parseInt(idCliente);
+        query("SELECT a.idPedido, a.idClienteFK, a.statusPedido, b.idKitFK, c.descricaoKit, c.precoKit, c.idProdutorFK, d.nome, d.cnpjProdutor FROM pedido AS a INNER JOIN pedidoKit AS b ON a.idPedido = b.idPedidoFK INNER JOIN kit AS c ON b.idKitFK = c.idKit INNER JOIN produtor AS d ON d.idProdutor = c.idProdutorFK" + filter, function (error, result, field) {
+            if (error) {
+                console.log("erro");
+                res.json(error);
+            } else {
+                console.log("boa");
+                console.log(result);
+                res.json(result);
+            }
+        });
+    },
+
     indexByProducer(req, res){
         let filter = '';
         const idProdutorFK = req.headers.authorization;
@@ -36,41 +55,47 @@ module.exports = {
     },
 
     create(req, res){
-        const {idProdutorFK} = req.body['cabecalho'];
-        //kits = req.body['produtos'];
-        kits = req.body['kits'];
-        //console.log(kits);
+        console.log("create order called");
+        console.log(req.body);
+
+        kit = req.body['idKit'];
+        cabecalho = req.body;
+
+        const idProdutorFK = cabecalho.idProdutorFK;
+        const idCarrinhoFK = cabecalho.idCarrinhoFK;
+        console.log(idCarrinhoFK);
+
+        const statusPedido = "PENDENTE"
+        
         const idClienteFK = req.headers.authorization;
-        query(`INSERT INTO pedido (idClienteFK, idProdutorFK) VALUES 
-        ('${idClienteFK}', '${idProdutorFK}')`,
+        query(`INSERT INTO pedido (idClienteFK, idProdutorFK, statusPedido) VALUES 
+        ('${idClienteFK}', '${idProdutorFK}', '${statusPedido}')`,
         function (error, result, field) {
-            if (error) {
-                res.json(error);
+             if (error) {
+                 res.json(error);
+                console.log("noticia ruim");
             } else {
                 res.json(result);
                 idPedidoFK = result['insertId'];
-                console.log(idPedidoFK);
-                for (let index = 0; index < kits.length; index++) {
-                    element = kits[index];
-                    idKitFK = element.idKit;
-                    query(`INSERT INTO pedidoKit (idPedidoFK, idKitFK) VALUES
-                    ('${idPedidoFK}', '${idKitFK}')`,
-                    function (error, results, field) {
-                        if (error) {
-                            console.log(results);
-                            console.log(error);
-                            console.log("Pedido deu Erro!")
-                        } else {
-                            console.log("Pedido salvo!")
-                        }
-                    });
-                }
-                }
-            });
+                const gerouPedido = 1;
+                let filter = '';
+                filter = ' WHERE idCarrinho = ' + parseInt(idCarrinhoFK);
+                query(`UPDATE carrinho SET gerouPedido = ('${gerouPedido}')` + filter,
+
+                 function (error, results, field) {
+                 if (error) {
+                     console.log(results);
+                     console.log(error);
+                     console.log("Pedido deu Erro!")
+                 } else {
+                     console.log("Pedido deu buena");
+                 }
+             });
+            }
+         });       
+      }
+    }
+            
         
 
-        }
-    }
-
-   
 

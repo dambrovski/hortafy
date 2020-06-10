@@ -9,16 +9,59 @@ idChartFK = 0;
 
 module.exports = {
     index(req, res){
+
+        //SELECT a.idCarrinho, b.idKitFK, c.descricaoKit, c.precoKit, c.idProdutorFK, d.nome, d.cnpjProdutor FROM carrinho AS a INNER JOIN carrinhoKit AS b ON a.idCarrinho = b.idCarrinhoFK INNER JOIN kit AS c ON b.idKitFK = c.idKit INNER JOIN produtor AS d ON d.idProdutor = c.idProdutorFK WHERE idClienteFK = 2
+        const idCliente = req.headers.authorization;
+        console.log(idCliente);
         console.log("called chart controller");
         let filter = '';
-        if(req.params.idChart) filter = ' WHERE idCarrinho=' + parseInt(req.params.idChart);
-        query("SELECT * FROM carrinho" + filter, function (error, result, field) {
+        if(idCliente) filter = ' WHERE idClienteFK=' + parseInt(idCliente);
+        query("SELECT a.idCarrinho, b.idKitFK, c.descricaoKit, c.precoKit, c.idProdutorFK, d.nome, d.cnpjProdutor FROM carrinho AS a INNER JOIN carrinhoKit AS b ON a.idCarrinho = b.idCarrinhoFK INNER JOIN kit AS c ON b.idKitFK = c.idKit INNER JOIN produtor AS d ON d.idProdutor = c.idProdutorFK" + filter, function (error, result, field) {
             if (error) {
                 res.json(error);
             } else {
                 res.json(result);
             }
         });
+    },
+    indexProducts (req, res){
+        const idCliente = req.headers.authorization;
+        console.log(idCliente);
+        console.log("called chart controller");
+        let filter = '';
+        if(idCliente) filter = ' WHERE idClienteFK=' + parseInt(idCliente);
+        query("SELECT d.idProdutoKit, e.descricao, e.caloria, e.precoUnit FROM carrinho AS a INNER JOIN carrinhoKit AS b ON a.idCarrinho = b.idCarrinhoFK INNER JOIN kit AS c ON b.idKitFK = c.idKit INNER JOIN produtoKit AS d ON d.idKitFK = c.idKit INNER JOIN produto AS e ON d.idProdutoFK = e.idProduto" + filter, function (error, result, field) {
+            if (error) {
+                res.json(error);
+            } else {
+                res.json(result);
+            }
+        });
+    },
+
+    delete(req, res){
+        console.log("delete chart called");
+        const idChart = req.params.idChart;
+        console.log(idChart);
+        //const ong_id = req.headers.authorization;
+        let filter = '';
+        if(idChart) filter = ' WHERE idCarrinho=' + parseInt(idChart);
+        query("DELETE FROM carrinho" + filter, function (error, result, field) {
+            if (error) {
+                console.log("deu erro");
+                //res.json(error);
+            } else {
+                if(idChart) filter = ' WHERE idCarrinhoFK=' + parseInt(idChart);
+                    query("DELETE FROM carrinhoKit;" + filter, function (error, result, field) {
+                    if (error) {
+                        console.log("deu erro")
+                    } else {
+                        console.log("carrinho totalmente excluido")
+                    }
+            });
+            }
+        });
+        
     },
 
 
@@ -31,10 +74,6 @@ module.exports = {
         const idClienteFK = cabecalho;
         
         
-        console.log(kit);
-        console.log(idClienteFK);
-        
-        //SELECT * FROM carrinho WHERE idClienteFK = 2  AND gerouPedido = 0
         
         let filter = '';
         if(idClienteFK) filter = ' WHERE idClienteFK=' + parseInt(idClienteFK) + ' AND gerouPedido = 0  ';

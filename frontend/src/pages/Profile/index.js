@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './styles.css';
+
 import { Link, useHistory } from 'react-router-dom';
 
 import logoImg from '../../assets/hortafy-logo.svg';
@@ -85,39 +86,23 @@ async function handleAddChart(idKit) {
 }
 
 async function handleAdd(idKit) {
-  
-  //const cabecalho = '{"cabecalho":{"idClienteFK": '+ idCliente + '}, "kits":[{"idKit":' + '"' + idKit + '"' + '}]}'
-  //console.log(cabecalho);
   var texto = '{"idClienteFK": "' +idCliente+'", "idKit": '+idKit+'}';
   var cabecalho = JSON.parse(texto);
-  console.log(cabecalho);
-
+  
   try {
-
     console.log("inclusão kit carrinho no front")
-    //const response = await api.post('charts', cabecalho);
-    
-    //teste = api.post('charts', cabecalho);
-    //console.log(teste);
     const response = await api.post('charts', cabecalho);
     console.log(response.data);
-      
-    console.log("vortei");
-    //console.log(response.data);
-    history.push('/chart');
+    history.push('/charts');
 
   } catch (error) {
     alert('Erro durante a inclusão do item no carrinho!');   
   }
 }
 
-
-    
-
     function handleLogout() {
         localStorage.clear()
-        history.push('/')
-    
+        history.push('/')    
     }
 
     const classes = useStyles();
@@ -157,14 +142,14 @@ async function handleAdd(idKit) {
                     <strong>Produtor: {kit.nome}</strong>
                     
                     <button className="btnExpandir" onClick={() => handleOpen()} type="button" >
-                        <FiMaximize2  size={30} color="#59A52C"/>
+                        <FiMaximize2 className='btnFi' size={30} color="#59A52C"/>
                     </button>
 
 
                     <strong>VALOR:  
                 {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL'}).format(kit.precoKit)}</strong>
                     <button onClick={() => handleAdd(kit.idKit)} type="button" >
-                        <FiShoppingCart  size={30} color="#59A52C"/>
+                        <FiShoppingCart className="btnFi" size={30} color="#59A52C"/>
                     </button>
                 </li>   
                 ))}    

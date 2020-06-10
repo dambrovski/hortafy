@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import './styles.css';
+
 import { Link, useHistory } from 'react-router-dom';
 
 import logoImg from '../../assets/hortafy-logo.svg';
 import {FiPower} from 'react-icons/fi'
-import {FiShoppingCart} from 'react-icons/fi'
-import {FiMaximize2} from 'react-icons/fi'
-import Button from '@material-ui/core/Button';
+import {FiDelete} from 'react-icons/fi'
+
 import api from '../../services/api';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
+
+
+
+
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -29,82 +30,74 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Profile(){
-    const [kits, setKits] = useState([]);
-    const [ProdutoKits, setProdutoKits] = useState([]);
-    
+    const [charts, setChart] = useState([]);
+    const [chartsProducts, setChartsProducts] = useState([]);
+
+    const [idKitFK, setIdKitFK] = useState([]);
+    const [idProdutorFK, setProdutorFK] = useState([]);
+    const [idCarrinhoFK, setCarrinhoFK] = useState([]);
 
     
-
-    //const [incidents, setIncidents] = useState([]);
     const history = useHistory();
     const idCliente = localStorage.getItem('idCliente');
     const emailCliente = localStorage.getItem('emailCliente');
     
+
+    
+    
     useEffect(() =>{
-        api.get('kits', {
+        api.get('charts', {
             headers:{
                 Authorization: idCliente,
             }
         }).then(response => {
-            console.log("pesquisando kits..");
-            setKits(response.data);
+            console.log("pesquisando carrinho..");
+            let dados;
+            dados = response.data[0];
+            console.log(dados);
+            if(dados != null){
+
+              setIdKitFK(dados.idKitFK);
+              setProdutorFK(dados.idProdutorFK);
+              setCarrinhoFK(dados.idCarrinho);
+            }
+            
+            
+            setChart(response.data);
         })
     }, [idCliente]);
 
-
-async function handleExpandKit(id) {
-    try {
-      setOpen(true);
-      const teste = await api.get(`kits/list/${id}`, {
-      });
-      console.log(teste.data);
-      //setKits(kits.filter(kit => kit.idKit !== id));
-    } catch (error) {
-        alert('Erro ao incluir no carrinho, tente novamente.');
-    }
-}
+    useEffect(() =>{
+        api.get('charts/products', {
+            headers:{
+                Authorization: idCliente,
+            }
+        }).then(response => {
+            console.log("pesquisando itens do carrinho..");
+            setChartsProducts(response.data);
+        })
+    }, [idCliente])
 
 
-async function handleAddChart(idKit) {
+
+
+async function handleAddOrder() {
   
-  const cabecalho = '{"cabecalho":{"idClienteFK": '+ idCliente + '}, "kits":[{"idKit":' + '"' + idKit + '"' + '}]}'
-  console.log(cabecalho);
-  try {
-
-    console.log("inclusão kit carrinho no front")
-    //const response = await api.post('charts', cabecalho);
-    await api.post('charts', cabecalho);
-      
-    console.log("vortei");
-    //console.log(response.data);
-    history.push('/chart');
-
-  } catch (error) {
-    alert('Erro durante a inclusão do item no carrinho!');   
-  }
-}
-
-async function handleAdd(idKit) {
-  
-  //const cabecalho = '{"cabecalho":{"idClienteFK": '+ idCliente + '}, "kits":[{"idKit":' + '"' + idKit + '"' + '}]}'
-  //console.log(cabecalho);
-  var texto = '{"idClienteFK": "' +idCliente+'", "idKit": '+idKit+'}';
+  var texto = '{"idProdutorFK": "' +idProdutorFK+'", "idCarrinhoFK": "' +idCarrinhoFK+'", "idKit": '+idKitFK+'}';
   var cabecalho = JSON.parse(texto);
   console.log(cabecalho);
 
   try {
 
-    console.log("inclusão kit carrinho no front")
-    //const response = await api.post('charts', cabecalho);
+    console.log("inclusão pedido no front")
     
-    //teste = api.post('charts', cabecalho);
-    //console.log(teste);
-    const response = await api.post('charts', cabecalho);
+    const response = await api.post('orders', cabecalho);
     console.log(response.data);
       
     console.log("vortei");
     //console.log(response.data);
-    history.push('/chart');
+    //history.push('/chart');
+    alert('Pedido Gerado!');   
 
   } catch (error) {
     alert('Erro durante a inclusão do item no carrinho!');   
@@ -112,6 +105,28 @@ async function handleAdd(idKit) {
 }
 
 
+
+function handleDeleteChart(id) {
+    try {
+        api.delete(`charts/${id}`, {
+          headers: {
+              Authorization: idCliente,                  
+          }
+      });
+      alert('Carrinho deletado!.');
+      history.push('/profile');
+    } catch (error) {
+        alert('Erro ao deletar Carrinho, tente novamente.');
+    }
+}
+
+  function teste(variavel) {
+  alert(idKitFK);
+  alert(idProdutorFK);
+  }
+
+
+  
     
 
     function handleLogout() {
@@ -119,6 +134,8 @@ async function handleAdd(idKit) {
         history.push('/')
     
     }
+
+  
 
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
@@ -133,73 +150,77 @@ async function handleAdd(idKit) {
 
 
     return (
-        <div className="profile-container">
+        <div className="chart-container">
             <header>
                 <img src={logoImg} alt=""/>
                 <span>Bem vindo(a), {emailCliente}!</span>
 
   
-                <Link className="button" to="/charts">Visualizar Carrinho</Link>
+                <Link className="button" to="/profile">Home</Link>
                 <Link className="button" to="/orders">Visualizar Pedidos</Link>
                 <button onClick={handleLogout} type="button">
                     <FiPower size={18} color="#E02041" />
                 </button>
             </header>
 
-            <h1>Conheça os Kits de nossos vendedores:</h1>
+            <h1>Finalizar pedido:</h1>
+
             <ul>
-                {kits.map(kit => (
+                {charts.map(chart => (
                     
-                    <li key={kit.idKit}>
-                    <strong>{kit.descricaoKit}</strong>
-                    
+                    <li key={chart.idCarrinho}>
+                    <strong>ID: {chart.idCarrinho}</strong>
 
-                    <strong>Produtor: {kit.nome}</strong>
+                    <strong>ID KIT: {chart.idKitFK}</strong>
+                    <strong>Descrição: {chart.descricaoKit}</strong>
+
+                    <strong>ID Produtor: {chart.idProdutorFK}</strong>
+                    <strong>Produtor: {chart.nome}</strong>
+                    <strong>CNPJ: {chart.cnpjProdutor}</strong>
                     
-                    <button className="btnExpandir" onClick={() => handleOpen()} type="button" >
-                        <FiMaximize2  size={30} color="#59A52C"/>
+      
+
+                    <strong>
+                      VALOR: {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL'}).format(chart.precoKit)}
+                    </strong>
+
+                    <button onClick={() => handleDeleteChart(chart.idCarrinho)} type="button" >
+                        <FiDelete className='btnFi' size={30} color="#E02041"/>
                     </button>
+                    
+                </li>   
+                ))}    
+            </ul>  
+    
 
+            
+            <h1>Itens do KIT:</h1>
+            <ul className="descricaoPedidoUl">
+                {chartsProducts.map(chartProduct => (
+                    
+                    <li className="descricaoPedidoLi" key={chartProduct.idProdutoKit}>
+                    <strong>Nome: {chartProduct.descricao}</strong>
+                
+                    <strong>Calorias: {chartProduct.caloria}</strong>
 
-                    <strong>VALOR:  
-                {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL'}).format(kit.precoKit)}</strong>
-                    <button onClick={() => handleAdd(kit.idKit)} type="button" >
-                        <FiShoppingCart  size={30} color="#59A52C"/>
-                    </button>
+                    <strong>
+                      VALOR: {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL'}).format(chartProduct.precoUnit)}
+                    </strong>
+                    
+      
+
                 </li>   
                 ))}    
             </ul>
-            <div>
-            
-            
-        <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
-        open={open}
-        onClose={handleClose}
-   closeAfterTransition
-   BackdropComponent={Backdrop}
-   BackdropProps={{
-     timeout: 500,
-   }}
- >
-   <Fade in={open}>
-     <div className={classes.paper}>
-         
 
-                            <h2 id="transition-modal-title">Produtos do Kit</h2>
-                            <p id="transition-modal-description">ITENS</p>
-         
-         
 
-     
-     </div>
-   </Fade>
- </Modal>
-</div>
 
+                <button className='buttonFinalizar' onClick={() => handleAddOrder()} type="button">
+                        Finalizar Pedido
+                    </button>
+        
 
         </div>
+        
     );
 }
