@@ -15,11 +15,13 @@ module.exports = {
         console.log(idCliente);
         console.log("called chart controller");
         let filter = '';
-        if(idCliente) filter = ' WHERE idClienteFK=' + parseInt(idCliente);
-        query("SELECT a.idCarrinho, b.idKitFK, c.descricaoKit, c.precoKit, c.idProdutorFK, d.nome, d.cnpjProdutor FROM carrinho AS a INNER JOIN carrinhoKit AS b ON a.idCarrinho = b.idCarrinhoFK INNER JOIN kit AS c ON b.idKitFK = c.idKit INNER JOIN produtor AS d ON d.idProdutor = c.idProdutorFK" + filter, function (error, result, field) {
+        if(idCliente) filter = ' WHERE a.idClienteFK = ' + parseInt(idCliente) + ' AND a.gerouPedido = 0  ';
+        console.log(filter);
+        query("SELECT a.idCarrinho, a.gerouPedido,a.idClienteFK, b.idKitFK, c.descricaoKit, c.precoKit, c.idProdutorFK, d.nome, d.cnpjProdutor FROM carrinho AS a INNER JOIN carrinhoKit AS b ON a.idCarrinho = b.idCarrinhoFK INNER JOIN kit AS c ON b.idKitFK = c.idKit INNER JOIN produtor AS d ON d.idProdutor = c.idProdutorFK" + filter, function (error, result, field) {
             if (error) {
                 res.json(error);
             } else {
+                console.log(result);
                 res.json(result);
             }
         });
@@ -29,7 +31,7 @@ module.exports = {
         console.log(idCliente);
         console.log("called chart controller");
         let filter = '';
-        if(idCliente) filter = ' WHERE idClienteFK=' + parseInt(idCliente);
+        if(idCliente) filter = ' WHERE idClienteFK=' + parseInt(idCliente) + ' AND a.gerouPedido = 0  ';
         query("SELECT d.idProdutoKit, e.descricao, e.caloria, e.precoUnit FROM carrinho AS a INNER JOIN carrinhoKit AS b ON a.idCarrinho = b.idCarrinhoFK INNER JOIN kit AS c ON b.idKitFK = c.idKit INNER JOIN produtoKit AS d ON d.idKitFK = c.idKit INNER JOIN produto AS e ON d.idProdutoFK = e.idProduto" + filter, function (error, result, field) {
             if (error) {
                 res.json(error);

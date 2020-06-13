@@ -15,17 +15,29 @@ module.exports = {
     },
 
     create(req, res){
-        const {nome, cnpjProdutor, senha} = req.body;
+        console.log("producer controller called");
+        const {email, cnpj, senha} = req.body;
+        produtorExiste = true;
+        filter = " WHERE email= '" + email;        
+        query("SELECT * FROM produtor" + filter + "'", function (error, result, field) {
+        console.log(result);
+        if (result.length < 1){
         query(`INSERT INTO produtor 
-        (nome, cnpjProdutor, senha) 
+        (email, cnpjProdutor, senha) 
         VALUES 
-        ('${nome}', '${cnpjProdutor}', '${senha}')`,
+        ('${email}', '${cnpj}', '${senha}')`,
         function (error, result, field) {
             if (error) {
                 res.json(error);
             } else {
                 res.json(result);
             }
-        });
+        })
+        }else{
+            console.log("existe na base");
+            produtorExiste = true;
+            res.json(produtorExiste);
+        }
+    });
     }
 }

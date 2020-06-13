@@ -7,10 +7,10 @@ import {FiArrowLeft} from 'react-icons/fi';
 
 
 
-export default function Register(){
-    const [email, setEmail] = useState('');
-    const [cnpj, setCnpj] = useState('');
-    const [senha, setSenha] = useState('');
+export default function RegisterProduct(){
+    const [descricao, setDescricao] = useState('');
+    const [precoUnit, setPrecoUnit] = useState('');
+    const [caloria, setCaloria] = useState('');
     
 
     const history = useHistory();
@@ -19,9 +19,9 @@ export default function Register(){
         e.preventDefault();
         
         const data = {
-            email,
-            cnpj,
-            senha,
+            descricao,
+            precoUnit,
+            caloria,
 
         };
         try {
@@ -31,7 +31,7 @@ export default function Register(){
             console.log(response.data);
             
             if (response.data == true){
-                alert(`Email já está cadastrado!.`);
+                alert(`descricao já está cadastrado!.`);
                 
             }
             else{
@@ -46,35 +46,33 @@ export default function Register(){
         
     }
     return(
-        <div className="register-container">
+        <div className="register-product-container">
             <div className="content">
                 
                 <form onSubmit={handleRegister}>
 
-                <Link className="back-link" to="/">
-                        <FiArrowLeft size={16} color="#E3992A" />
-                        Home
-                    </Link>
-                <section>
-                    
-                    <img src={logoImg} alt="Hortafy"/>
-                    
-                    </section>
 
+                <Link className="buttonProfile" to="/products">Cadastrar Produtos</Link>
+                <Link className="buttonProfile" to="/kits">Cadastrar Kits</Link>
+                <Link className="buttonProfile" to="/orders">Gerenciar Pedidos</Link>
 
-                    <input placeholder="CNPJ" 
-                    value={cnpj}
-                    onChange={e => setCnpj(e.target.value)}
-                    />
-                
-                    <input placeholder="Email" 
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
+                    <h1>CADASTRO DE PRODUTO</h1>
+      
+                    <input placeholder="Descrição do Produto" 
+                    value={descricao}
+                    onChange={e => setDescricao(e.target.value)}
                     />
 
-                    <input placeholder="Senha" type="password" 
-                    value={senha}
-                    onChange={e => setSenha(e.target.value)}
+
+                    <input placeholder="Preço Unitário"  type="number"
+                    value={precoUnit}
+                    onChange={e => setPrecoUnit(e.target.value)}
+                    />
+          
+
+                    <input placeholder="Calorias" type="number" 
+                    value={caloria}
+                    onChange={e => setCaloria(e.target.value)}
                     />
                     <button className="buttonRegisterProducer" type="submit">Cadastrar</button>                   
                 </form>

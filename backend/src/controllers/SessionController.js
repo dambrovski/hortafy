@@ -19,16 +19,15 @@ module.exports = {
 
     create(req, res){
         console.log("criei a sessão");
-        const {email,senha} = req.body;
-        console.log(senha);
-        console.log(email);
-        filter = " WHERE email= '";
+        const {email,senha,value} = req.body;
+        console.log(value);
+        filter = value + " WHERE email= '";
         
         console.log(filter);
         console.log("cheguei aqui filter")
         
         
-        query("SELECT * FROM cliente" + filter + email + "'" + "AND senha='" + senha + "'", function (error, result, field) {
+        query("SELECT * FROM " + filter + email + "'" + "AND senha='" + senha + "'", function (error, result, field) {
             console.log(result);
             if (result.length < 1) {
                     res.json(error);

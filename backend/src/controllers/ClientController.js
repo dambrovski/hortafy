@@ -30,7 +30,7 @@ module.exports = {
                     if (error) {
                         clienteExiste = true;
                         res.json(clienteExiste);
-                        //res.json(error);
+                        
                     } else {
                         clienteExiste = false;
                         res.json(clienteExiste);
@@ -47,5 +47,5 @@ module.exports = {
         });
         
 
-    },
+    }
 }

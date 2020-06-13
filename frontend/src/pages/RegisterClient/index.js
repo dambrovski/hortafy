@@ -30,13 +30,12 @@ export default function Register(){
             console.log("vortei")
             console.log(response.data);
             
-            //alert(`Seu ID de acesso: ${response.data.idCliente}`);
             if (response.data == true){
                 alert(`Email já está cadastrado!.`);
                 
             }
             else{
-                alert(`Cadastrado com sucesso! Você será redirecionado a tela inicial.`);
+                alert(`Cliente Cadastrado com sucesso! Você será redirecionado a tela inicial.`);
                 history.push('/');
             }
             
@@ -76,7 +75,7 @@ export default function Register(){
 
 
                     
-                    <button className="button" type="submit">Cadastrar</button>                   
+                    <button className="buttonRegisterClient" type="submit">Cadastrar</button>                   
                 </form>
             </div>
         </div>

@@ -27,9 +27,7 @@ routes.post('/products', ProductController.create);
 routes.get('/kits/producer', KitController.indexByProducer);
 routes.get('/kits/list/:idKit', KitController.indexFull);
 routes.get('/kits/list', KitController.indexFull);
-
 routes.get('/kits', KitController.index);
-//routes.get('/kits/:idKit', KitController.index);
 routes.post('/kits', KitController.create);
 
 routes.get('/orders', OrderController.index);    

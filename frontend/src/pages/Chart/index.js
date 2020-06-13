@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Profile(){
+export default function ProfileClient(){
     const [charts, setChart] = useState([]);
     const [chartsProducts, setChartsProducts] = useState([]);
 
@@ -91,13 +91,18 @@ async function handleAddOrder() {
 
     console.log("inclusão pedido no front")
     
-    const response = await api.post('orders', cabecalho);
+    const response = await api.post('orders', cabecalho, {
+      headers:{
+          Authorization: idCliente,
+      }
+    });
     console.log(response.data);
       
     console.log("vortei");
     //console.log(response.data);
-    //history.push('/chart');
+    
     alert('Pedido Gerado!');   
+    history.push('/orders');
 
   } catch (error) {
     alert('Erro durante a inclusão do item no carrinho!');   
@@ -114,7 +119,7 @@ function handleDeleteChart(id) {
           }
       });
       alert('Carrinho deletado!.');
-      history.push('/profile');
+      history.push('/profileClient');
     } catch (error) {
         alert('Erro ao deletar Carrinho, tente novamente.');
     }
@@ -156,7 +161,7 @@ function handleDeleteChart(id) {
                 <span>Bem vindo(a), {emailCliente}!</span>
 
   
-                <Link className="button" to="/profile">Home</Link>
+                <Link className="button" to="/profileClient">Home</Link>
                 <Link className="button" to="/orders">Visualizar Pedidos</Link>
                 <button onClick={handleLogout} type="button">
                     <FiPower size={18} color="#E02041" />

@@ -1,4 +1,3 @@
-//const mysql = require('../database/connectionMysql');
 const {query} = require('../database/connectionMysql');
 
 
@@ -28,13 +27,12 @@ module.exports = {
         console.log(idCliente);
         console.log("called order controller");
         let filter = '';
-        if(idCliente) filter = ' WHERE a.idClienteFK =' + parseInt(idCliente);
+        if(idCliente) filter = ' WHERE a.idClienteFK =' + parseInt(idCliente) + ' ORDER BY a.idPedido DESC';
         query("SELECT a.idPedido, a.idClienteFK, a.statusPedido, b.idKitFK, c.descricaoKit, c.precoKit, c.idProdutorFK, d.nome, d.cnpjProdutor FROM pedido AS a INNER JOIN pedidoKit AS b ON a.idPedido = b.idPedidoFK INNER JOIN kit AS c ON b.idKitFK = c.idKit INNER JOIN produtor AS d ON d.idProdutor = c.idProdutorFK" + filter, function (error, result, field) {
             if (error) {
                 console.log("erro");
                 res.json(error);
             } else {
-                console.log("boa");
                 console.log(result);
                 res.json(result);
             }
@@ -78,21 +76,33 @@ module.exports = {
                 res.json(result);
                 idPedidoFK = result['insertId'];
                 const gerouPedido = 1;
-                let filter = '';
-                filter = ' WHERE idCarrinho = ' + parseInt(idCarrinhoFK);
-                query(`UPDATE carrinho SET gerouPedido = ('${gerouPedido}')` + filter,
+                query(`INSERT INTO pedidoKit (idPedidoFK, idKitFK) VALUES
+                        ('${idPedidoFK}', '${kit}')`,
+                        function (error, results, field) {
+                        if (error) {
+                            console.log(results);
+                            console.log(error);
+                            console.log("Carrinho deu Erro!")
+                        } else {
+                            console.log("Carrinho deu buena");
+                            let filter = '';
+                            filter = ' WHERE idCarrinho = ' + parseInt(idCarrinhoFK);
+                            query(`UPDATE carrinho SET gerouPedido = ('${gerouPedido}')` + filter,
 
-                 function (error, results, field) {
-                 if (error) {
-                     console.log(results);
-                     console.log(error);
-                     console.log("Pedido deu Erro!")
-                 } else {
-                     console.log("Pedido deu buena");
-                 }
-             });
-            }
-         });       
+                            function (error, results, field) {
+                            if (error) {
+                                console.log(results);
+                                console.log(error);
+                                console.log("Pedido deu Erro!")
+                            } else {
+                                console.log("Pedido deu buena");
+                        }
+                    });
+                }
+            });    
+             }
+         });
+                   
       }
     }
             

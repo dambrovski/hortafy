@@ -44,4 +44,22 @@
     margin-top: 8px;
 }
 
+.buttonRegisterClient:hover {
+    filter: brightness(90%);
+}
 
+.buttonRegisterClient{    
+    width: 80%;
+    height: 60px;
+    background: rgb(33, 23, 128);
+    border: 0;
+    border-radius: 8px;
+    color: #FFF;
+    font-weight: 700;
+    
+    
+    font-size: 18px;
+    line-height: 60px;
+    transition: filter 0.2s;
+
+}

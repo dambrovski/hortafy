@@ -1,4 +1,4 @@
-.register-container{
+.register-product-container{
     margin-bottom: auto;
     width: 100%;
     max-width: 1120%;
@@ -6,12 +6,11 @@
 
 }
 
-.register-container .content section{
-    
+.register-product-container .content section{
     margin-left: 10px;
 }
 
-.register-container .content section a{
+.register-product-container .content section a{
     font-size: 20px;
     margin-right: 200px;
     margin: 35px;
@@ -20,12 +19,12 @@
 
 
 
-.register-container .content section h1{
+.register-product-container .content section h1{
     
     margin: 35px;
 }
 
-.register-container .content form{
+.register-product-container .content form{
     margin: 35px;
     margin-left: 350px;
     
@@ -107,4 +106,11 @@ form input {
 
 .buttonRegisterProducer:hover {
     filter: brightness(90%);
+}
+
+.register-product-container div form a {
+    width: 200px;
+    margin: 14px;
+    margin-left: auto;
+    margin-top: 0;
 }
