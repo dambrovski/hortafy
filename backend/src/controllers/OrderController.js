@@ -21,7 +21,7 @@ module.exports = {
         const idCliente = req.headers.authorization;
         let filter = '';
         if(idCliente) filter = ' WHERE a.idClienteFK =' + parseInt(idCliente) + ' ORDER BY a.idPedido DESC';
-        query("SELECT a.idPedido, a.idClienteFK, a.statusPedido, b.idKitFK, c.descricaoKit, c.precoKit, c.idProdutorFK, d.email, d.cnpjProdutor FROM pedido AS a INNER JOIN pedidoKit AS b ON a.idPedido = b.idPedidoFK INNER JOIN kit AS c ON b.idKitFK = c.idKit INNER JOIN produtor AS d ON d.idProdutor = c.idProdutorFK" + filter, function (error, result, field) {
+        query("SELECT a.idPedido, a.idClienteFK, a.statusPedido, a.idInstituicaoFK, b.idKitFK, c.descricaoKit, c.precoKit, c.idProdutorFK, d.emailProdutor, d.cnpjProdutor, e.emailInstituicao FROM pedido AS a INNER JOIN pedidoKit AS b ON a.idPedido = b.idPedidoFK INNER JOIN kit AS c ON b.idKitFK = c.idKit INNER JOIN produtor AS d ON d.idProdutor = c.idProdutorFK LEFT JOIN instituicao AS e ON a.idInstituicaoFK = e.idInstituicao" + filter, function (error, result, field) {
             if (error) {
                 res.json(error);
             } else {
@@ -34,7 +34,20 @@ module.exports = {
         const idProdutor = req.headers.authorization;
         let filter = '';
         if(idProdutor) filter = ' WHERE a.idProdutorFK =' + parseInt(idProdutor) + ' ORDER BY a.idPedido DESC';
-        query("SELECT a.idPedido, a.idClienteFK, a.statusPedido, b.idKitFK, c.descricaoKit, c.precoKit, c.idProdutorFK, d.email, d.instituicaoCaridosa FROM pedido AS a INNER JOIN pedidoKit AS b ON a.idPedido = b.idPedidoFK INNER JOIN kit AS c ON b.idKitFK = c.idKit INNER JOIN cliente AS d ON a.idClienteFK = d.idCliente" + filter, function (error, result, field) {
+        query("SELECT a.idPedido, a.idClienteFK, a.statusPedido, a.idInstituicaoFK, a.idProdutorFK, b.idKitFK, c.descricaoKit, c.precoKit, c.idProdutorFK, d.emailCliente, e.emailInstituicao FROM pedido AS a INNER JOIN pedidoKit AS b ON a.idPedido = b.idPedidoFK INNER JOIN kit AS c ON b.idKitFK = c.idKit INNER JOIN cliente AS d ON a.idClienteFK = d.idCliente LEFT JOIN instituicao AS e ON a.idInstituicaoFK = e.idInstituicao" + filter, function (error, result, field) {
+            if (error) {
+                res.json(error);
+            } else {
+                res.json(result);
+            }
+        });
+    },
+
+    indexByInstitution(req, res){
+        const idInstituicao = req.headers.authorization;
+        let filter = '';
+        if(idInstituicao) filter = ' WHERE a.idInstituicaoFK =' + parseInt(idInstituicao) + ' ORDER BY a.idPedido DESC';
+        query("SELECT a.idPedido, a.idClienteFK, a.statusPedido, b.idKitFK, c.descricaoKit, c.precoKit, c.idProdutorFK, d.emailCliente, e.emailProdutor FROM pedido AS a INNER JOIN pedidoKit AS b ON a.idPedido = b.idPedidoFK INNER JOIN kit AS c ON b.idKitFK = c.idKit INNER JOIN cliente AS d ON a.idClienteFK = d.idCliente INNER JOIN produtor AS e ON a.idProdutorFK = e.idProdutor" + filter, function (error, result, field) {
             if (error) {
                 res.json(error);
             } else {
@@ -47,12 +60,13 @@ module.exports = {
         kit = req.body['idKit'];
         cabecalho = req.body;
         const idProdutorFK = cabecalho.idProdutorFK;
+        const idInstituicaoFK = cabecalho.idInstituicaoFK;
         const idCarrinhoFK = cabecalho.idCarrinhoFK;
         const statusPedido = "PENDENTE"
         const idClienteFK = req.headers.authorization;
 
-        query(`INSERT INTO pedido (idClienteFK, idProdutorFK, statusPedido) VALUES 
-        ('${idClienteFK}', '${idProdutorFK}', '${statusPedido}')`,
+        query(`INSERT INTO pedido (idClienteFK, idProdutorFK, statusPedido, idInstituicaoFK) VALUES 
+        ('${idClienteFK}', '${idProdutorFK}', '${statusPedido}', '${idInstituicaoFK}')`,
         function (error, result, field) {
              if (error) {
                  res.json(error);

@@ -110,33 +110,56 @@ function handleSetStatus(idPedido, status) {
 
             <h1>Selecione o Status atual do pedido:</h1>
             <ul>
-                {orders.map(order => (
+                {orders.map(order => {
+                    if(order.idInstituicaoFK != 0){
+                    return(
+                    
                     <li key={order.idPedido}>
+                    <h2><strong>KIT DOADO P/ INSTITUIÇÃO: {order.emailInstituicao}</strong></h2>
                     <strong>ID PEDIDO: {order.idPedido}</strong>
                     <strong>STATUS: {order.statusPedido}</strong>
-                    <strong>ID CLIENTE: {order.idClienteFK}</strong>
-                    <strong>EMAIL: {order.email}</strong>
+                    <strong>DOADOR: {order.emailCliente}</strong>
                     <strong>KIT: {order.descricaoKit}</strong>
                     
                     <strong>
                       VALOR: {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL'}).format(order.precoKit)}
                     </strong>
-
                     <button className='btnFiPendente' onClick={() => handleSetStatus(order.idPedido, "PENDENTE")} type="button" >
                       PENDENTE
                     </button>
-                    
                     <button className='btnFiProcessamento' onClick={() => handleSetStatus(order.idPedido, "PROCESSAMENTO")} type="button" >
                         PROCESSAMENTO
                     </button>
-                    
                     <button className='btnFiEntregue' onClick={() => handleSetStatus(order.idPedido, "ENTREGUE")} type="button" >
                         ENTREGUE
-                    </button>
-                    
-                </li>   
-                ))}    
-            </ul>  
-        </div>
-    );
-}
+                    </button> 
+                </li> 
+
+                    )} else {  
+                        return( 
+                          <li key={order.idPedido}>
+                          <strong>ID PEDIDO: {order.idPedido}</strong>
+                          <strong>STATUS: {order.statusPedido}</strong>
+                          <strong>ID CLIENTE: {order.idClienteFK}</strong>
+                          <strong>EMAIL: {order.emailCliente}</strong>
+                          <strong>KIT: {order.descricaoKit}</strong>
+                          
+                          <strong>
+                            VALOR: {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL'}).format(order.precoKit)}
+                          </strong>
+                          <button className='btnFiPendente' onClick={() => handleSetStatus(order.idPedido, "PENDENTE")} type="button" >
+                            PENDENTE
+                          </button>
+                          <button className='btnFiProcessamento' onClick={() => handleSetStatus(order.idPedido, "PROCESSAMENTO")} type="button" >
+                              PROCESSAMENTO
+                          </button>
+                          <button className='btnFiEntregue' onClick={() => handleSetStatus(order.idPedido, "ENTREGUE")} type="button" >
+                              ENTREGUE
+                          </button>
+                          </li>   
+                          )}
+                        })}    
+                  </ul>  
+            </div>
+          );
+        }

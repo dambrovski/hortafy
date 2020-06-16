@@ -3,7 +3,6 @@ import './styles.css';
 import { Link, useHistory } from 'react-router-dom';
 import logoImg from '../../assets/hortafy-logo.svg';
 import {FiPower} from 'react-icons/fi'
-import {FiDelete} from 'react-icons/fi'
 import api from '../../services/api';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -24,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
 export default function ProfileClient(){
     const [orders, setOrder] = useState([]);    
     const history = useHistory();
-    const idCliente = localStorage.getItem('idCliente');
-    const emailCliente = localStorage.getItem('emailCliente');
+    const idInstituicao = localStorage.getItem('idInstituicao');
+    const emailInstituicao = localStorage.getItem('emailInstituicao');
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => {
@@ -37,30 +36,19 @@ export default function ProfileClient(){
     };
     
     useEffect(() =>{
-        api.get('orders/client', {
+        api.get('orders/institution', {
             headers:{
-                Authorization: idCliente,
+                Authorization: idInstituicao,
             }
         }).then(response => {
             setOrder(response.data);
         })
-    }, [idCliente]);
-//16062020
+    }, [idInstituicao]);
 
-async function handleExpandKit(id) {
-    try {
-      setOpen(true);
-      const teste = await api.get(`kits/list/${id}`, {
-      });
-      console.log(teste.data);
-      
-    } catch (error) {
-        alert('Erro ao incluir no carrinho, tente novamente.');
-    }
-}
+
 
 async function handleAdd(idKit) {  
-  var texto = '{"idClienteFK": "' +idCliente+'", "idKit": '+idKit+'}';
+  var texto = '{"idInstituicaoFK": "' +idInstituicao+'", "idKit": '+idKit+'}';
   var cabecalho = JSON.parse(texto);
   console.log(cabecalho);
 
@@ -72,6 +60,20 @@ async function handleAdd(idKit) {
   }
 }
 
+function handleDeleteChart(id) {
+    try {
+        api.delete(`charts/${id}`, {
+          headers: {
+              Authorization: idInstituicao,                  
+          }
+      });
+      alert('Carrinho deletado!.');
+      history.push('/profileClient');
+    } catch (error) {
+        alert('Erro ao deletar Carrinho, tente novamente.');
+    }
+}
+  
 function handleLogout() {
     localStorage.clear()
     history.push('/')
@@ -81,47 +83,36 @@ function handleLogout() {
         <div className="chart-container">
             <header>
                 <img src={logoImg} alt=""/>
-                <span>Bem vindo(a), {emailCliente}!</span>
+                <span>Bem vindo(a), {emailInstituicao}!</span>
+
   
-                <Link className="button" to="/profileClient">Home</Link>
-                <Link className="button" to="/charts">Visualizar Carrinho</Link>
+                
                 <button onClick={handleLogout} type="button">
                     <FiPower size={18} color="#E02041" />
                 </button>
             </header>
 
-            <h1>Acompanhar pedidos:</h1>
+            <h1>Acompanhar Doações:</h1>
 
             <ul>
-                {orders.map(order => {
-                    if(order.idInstituicaoFK != 0){
-                    return(
+                {orders.map(order => (
+                    
                     <li key={order.idPedido}>
                     <strong>ID: {order.idPedido}</strong>
-                    <h2><strong>KIT DOADO P/ INSTITUIÇÃO: {order.emailInstituicao}</strong></h2>
                     <strong>STATUS: {order.statusPedido}</strong>
-                    <strong>Produtor: {order.emailProdutor}</strong>
+                    <strong>DOADOR: {order.emailCliente}</strong>
+                    <strong>PRODUTOR RESPONSÁVEL: {order.emailProdutor}</strong>
+                    
                     <strong>KIT: {order.descricaoKit}</strong>
                     
                     <strong>
-                      VALOR: {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL'}).format(order.precoKit)}
+                      VALOR DO KIT DOADO: {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL'}).format(order.precoKit)}
                     </strong>
-                    </li>   
-                    )} else {  
-                  return(
-                    <li key={order.idPedido}>
-                    <strong>ID: {order.idPedido}</strong>
-                    <strong>STATUS: {order.statusPedido}</strong>
-                    <strong>Produtor: {order.emailProdutor}</strong>
-                    <strong>KIT: {order.descricaoKit}</strong>
-                    <strong>
-                      VALOR: {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL'}).format(order.precoKit)}
-                    </strong>
-                    </li>   
 
-                  )}
-                
-                })}    
+        
+                    
+                </li>   
+                ))}    
             </ul>  
         </div>
     );

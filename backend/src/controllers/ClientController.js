@@ -14,15 +14,15 @@ module.exports = {
     },
 
     create(req, res){
-        const {email, cartaoCredito, instituicaoCaridosa, admin, senha} = req.body;
+        const {email, cartaoCredito, senha} = req.body;
         clienteExiste = true;
         filter = " WHERE email= '" + email;        
         query("SELECT * FROM cliente" + filter + "'", function (error, result, field) {
             if (result.length < 1){
                 query(`INSERT INTO cliente 
-                (email, cartaoCredito, instituicaoCaridosa, admin, senha) 
+                (email, cartaoCredito, senha) 
                 VALUES 
-                ('${email}', '${cartaoCredito}', '${instituicaoCaridosa}', '${admin}', '${senha}')`,
+                ('${email}', '${cartaoCredito}', '${senha}')`,
                 function (error, result, field) {
                     if (error) {
                         clienteExiste = true;

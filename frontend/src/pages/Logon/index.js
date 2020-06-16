@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { FiTruck } from 'react-icons/fi'
 import { FiUser } from 'react-icons/fi'
+import { FiHeart } from 'react-icons/fi'
 import './styles.css';
 import logoImg from '../../assets/hortafy-logo.svg';
 import api from '../../services/api'
@@ -39,14 +40,14 @@ export default function Logon() {
                 }
                 else{       
                     localStorage.setItem('idCliente', response.data[0].idCliente);
-                    localStorage.setItem('emailCliente', response.data[0].email);
+                    localStorage.setItem('emailCliente', response.data[0].emailCliente);
                     history.push('/profileClient');
                 }
              
         } catch (error) {
             alert('Falha no login Cliente, tente novamente.')
         }
-        }else{
+        }else if(value == 'produtor'){
             try {
                     const response = await api.post('sessions', data);
                     if(response.data == null){
@@ -54,13 +55,29 @@ export default function Logon() {
                     }
                     else{
                         localStorage.setItem('idProdutor', response.data[0].idProdutor);
-                        localStorage.setItem('emailProdutor', response.data[0].email);
+                        localStorage.setItem('emailProdutor', response.data[0].emailProdutor);
                         localStorage.setItem('tipoUsuario', response.data[0].value);       
                         history.push('/ProfileProducer');
                     }
                  
             } catch (error) {
                 alert('Falha no login Produtor, tente novamente.')
+            }
+        }else{
+            try {
+                    const response = await api.post('sessions', data);
+                    if(response.data == null){
+                        alert('Email ou senha incorreta!')
+                    }
+                    else{
+                        localStorage.setItem('idInstituicao', response.data[0].idInstituicao);
+                        localStorage.setItem('emailInstituicao', response.data[0].emailInstituicao);
+                        localStorage.setItem('tipoUsuario', response.data[0].value);       
+                        history.push('/ProfileInstitution');
+                    }
+                 
+            } catch (error) {
+                alert('Falha no login da Instituição, tente novamente.')
             }
         }
     }
@@ -70,6 +87,7 @@ export default function Logon() {
                         <RadioGroup className="tipoAcessoRadio" aria-label="tipoAcesso" name="tipoAcesso1" value={value} onChange={handleChange}>
                             <FormControlLabel className="tipoAcessoLabel" value="cliente"  control={<Radio />} label="Cliente"  />
                             <FormControlLabel className="tipoAcessoLabel" value="produtor" control={<Radio />} label="Produtor" />
+                            <FormControlLabel className="tipoAcessoLabel" value="instituicao" control={<Radio />} label="Instituição Caridosa" />
                         </RadioGroup>
             </FormControl>
             <section className="form">
@@ -86,11 +104,15 @@ export default function Logon() {
                     <button className="buttonLogin" type="submit">Entrar</button>
                     <Link className="back-link-client" to="/registerClient">
                         <FiUser size={16} color="#59A52C" />
-                        Quero ser cliente!
-                        <Link className="back-link-producer" to="/registerProducer">
-                        <FiTruck size={16} color="#E3992A" />
-                        Quero ser um Vendedor!
+                        Quero ser Cliente!
                     </Link>
+                    <Link className="back-link-producer" to="/registerProducer">
+                        <FiTruck size={16} color="#E3992A" />
+                        Quero ser Vendedor!
+                    </Link>
+                    <Link className="back-link-institution" to="/registerInstitution">
+                        <FiHeart size={16} color="RED" />
+                        Instituição Caridosa!
                     </Link>
                 </form>
             </section>

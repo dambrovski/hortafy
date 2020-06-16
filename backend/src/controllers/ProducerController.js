@@ -14,15 +14,15 @@ module.exports = {
     },
 
     create(req, res){
-        const {email, cnpj, senha} = req.body;
+        const {emailProdutor, cnpj, senha} = req.body;
         produtorExiste = true;
-        filter = " WHERE email= '" + email;        
+        filter = " WHERE emailProdutor= '" + emailProdutor;        
         query("SELECT * FROM produtor" + filter + "'", function (error, result, field) {
         if (result.length < 1){
             query(`INSERT INTO produtor 
-            (email, cnpjProdutor, senha) 
+            (emailProdutor, cnpjProdutor, senha) 
             VALUES 
-            ('${email}', '${cnpj}', '${senha}')`,
+            ('${emailProdutor}', '${cnpj}', '${senha}')`,
             function (error, result, field) {
                 if (error) {
                     res.json(error);

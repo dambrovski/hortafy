@@ -28,9 +28,12 @@ export default function Chart(){
     const [idKitFK, setIdKitFK] = useState([]);
     const [idProdutorFK, setProdutorFK] = useState([]);
     const [idCarrinhoFK, setCarrinhoFK] = useState([]);
+    const [instituicoes, setInstituicoes] = useState([]);
     const history = useHistory();
     const idCliente = localStorage.getItem('idCliente');
     const emailCliente = localStorage.getItem('emailCliente');
+    const [selectValue, setSelectValue] = useState('');  
+
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);  
     const handleOpen = () => {
@@ -65,10 +68,25 @@ export default function Chart(){
         }).then(response => {
             setChartsProducts(response.data);
         })
-    }, [idCliente])
+    }, [idCliente]);
+
+    useEffect(() =>{
+      api.get('institutions').then(response => {
+          console.log("pesquisando instituicoes..");
+          console.log(response.data);
+          setInstituicoes(response.data);
+          
+      })
+  }, [idCliente]);
+
 
 async function handleAddOrder() {  
-  var texto = '{"idProdutorFK": "' +idProdutorFK+'", "idCarrinhoFK": "' +idCarrinhoFK+'", "idKit": '+idKitFK+'}';
+  let teste = 0;
+  teste = selectValue;
+  if (selectValue == '') {
+    teste = 0;
+  }
+  var texto = '{"idProdutorFK": "' +idProdutorFK+'", "idInstituicaoFK": "' +teste+'", "idCarrinhoFK": "' +idCarrinhoFK+'", "idKit": '+idKitFK+'}';
   var cabecalho = JSON.parse(texto);
   
   try {
@@ -167,11 +185,23 @@ function handleDeleteChart(id) {
                 ))}    
             </ul>
 
-
+                    <h1>Deseja doar seu KIT para uma Instituição Caridosa?</h1>
+                    <div> 
+                        <select className="selectBox" value={selectValue} onChange={e => setSelectValue(e.target.value)}>
+                        <option value="" >Selecione a Instituição</option>
+                        
+                        {
+                        instituicoes.map(function(instituicao) {
+                        return <option key={instituicao.idInstituicao} 
+                        value={instituicao.idInstituicao}>{instituicao.emailInstituicao}</option>;
+                        })
+                        }
+                    </select>
+                    </div>
 
                 <button className='buttonFinalizar' onClick={() => handleAddOrder()} type="button">
                         Finalizar Pedido
-                    </button>
+                  </button>
         
 
         </div>

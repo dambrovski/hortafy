@@ -60,7 +60,6 @@ export default function RegisterProduct(){
         };
         try {   
             console.log("called kits post");
-
             const response = await api.post('kits', data   , {
                 headers:{
                     Authorization: idProdutor,

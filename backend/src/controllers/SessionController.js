@@ -15,8 +15,9 @@ module.exports = {
 
     create(req, res){
         const {email,senha,value} = req.body;
-        filter = value + " WHERE email= '";
-        
+        console.log(email,senha,value);
+        filter = value + " WHERE email" + value + "='";
+        console.log(filter);
         query("SELECT * FROM " + filter + email + "'" + "AND senha='" + senha + "'", function (error, result, field) {
             console.log(result);
             if (result.length < 1) {

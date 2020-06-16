@@ -26,9 +26,10 @@
 }
 
 .logon-container section.form img{
-
+    
     align-items: center;
     margin-bottom: 8px;
+    
 }
 .back-link{
     display: inline-flex;
@@ -53,11 +54,11 @@
 
 .back-link-client{
     display: flex;
-    
+    align-content: center;
     margin-top: 10px;
     color: #41414d;
     font-size: 18px;
-    
+    margin-left: 50px;
     font-weight: 500;
     transition: opacity 0.2s;
 
@@ -79,7 +80,29 @@
     margin-top: 10px;
     color: #41414d;
     font-size: 18px;
+    margin-left: 50px;
+    font-weight: 500;
+    transition: opacity 0.2s;
+
+}
+
+.back-link-institution svg{
+    margin-right: 8px;
+    display: flex;
+}
+
+.back-link-institution:hover{
+    opacity: 0.8;
+}
+
+
+.back-link-institution{
+    display: flex;
     
+    margin-top: 10px;
+    color: #41414d;
+    font-size: 18px;
+    margin-left: 50px;
     font-weight: 500;
     transition: opacity 0.2s;
 

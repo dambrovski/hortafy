@@ -3,6 +3,7 @@ const cors = require('cors')
 
 const ClientController = require('./controllers/ClientController');
 const ProducerController = require('./controllers/ProducerController');
+const InstitutionController = require('./controllers/InstitutionController');
 const ProductController = require('./controllers/ProductController');
 const KitController = require('./controllers/KitController');
 const OrderController = require('./controllers/OrderController');
@@ -16,6 +17,9 @@ routes.post('/clients', ClientController.create);
 
 routes.get('/producers', ProducerController.index);
 routes.post('/producers', ProducerController.create);
+
+routes.get('/institutions', InstitutionController.index);
+routes.post('/institutions', InstitutionController.create);
 
 routes.get('/products', ProductController.index);
 routes.get('/products/producer', ProductController.indexByProducer);
@@ -32,6 +36,7 @@ routes.post('/kits', KitController.create);
 routes.get('/orders', OrderController.index);    
 routes.get('/orders/producer', OrderController.indexByProducer);
 routes.get('/orders/client', OrderController.indexByClient);
+routes.get('/orders/institution', OrderController.indexByInstitution);
 routes.get('/orders/:idOrder', OrderController.index);
 routes.post('/orders/status', OrderController.status);
 routes.post('/orders', OrderController.create);
