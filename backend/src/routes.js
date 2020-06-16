@@ -33,8 +33,8 @@ routes.post('/kits', KitController.create);
 routes.get('/orders', OrderController.index);    
 routes.get('/orders/producer', OrderController.indexByProducer);
 routes.get('/orders/client', OrderController.indexByClient);
-
 routes.get('/orders/:idOrder', OrderController.index);
+routes.post('/orders/status', OrderController.status);
 routes.post('/orders', OrderController.create);
 
 routes.get('/charts', ChartController.index);    

@@ -1,18 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './styles.css';
-
 import { Link, useHistory } from 'react-router-dom';
-
 import logoImg from '../../assets/hortafy-logo.svg';
 import {FiPower} from 'react-icons/fi'
 import {FiDelete} from 'react-icons/fi'
-
 import api from '../../services/api';
-
 import { makeStyles } from '@material-ui/core/styles';
-
-
-
 
 
 const useStyles = makeStyles((theme) => ({
@@ -29,40 +22,37 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ProfileClient(){
+export default function Chart(){
     const [charts, setChart] = useState([]);
     const [chartsProducts, setChartsProducts] = useState([]);
-
     const [idKitFK, setIdKitFK] = useState([]);
     const [idProdutorFK, setProdutorFK] = useState([]);
     const [idCarrinhoFK, setCarrinhoFK] = useState([]);
-
-    
     const history = useHistory();
     const idCliente = localStorage.getItem('idCliente');
     const emailCliente = localStorage.getItem('emailCliente');
-    
+    const classes = useStyles();
+    const [open, setOpen] = React.useState(false);  
+    const handleOpen = () => {
+      setOpen(true);
+    };
+    const handleClose = () => {
+      setOpen(false);
+    };
 
-    
-    
     useEffect(() =>{
         api.get('charts', {
             headers:{
                 Authorization: idCliente,
             }
         }).then(response => {
-            console.log("pesquisando carrinho..");
             let dados;
             dados = response.data[0];
-            console.log(dados);
             if(dados != null){
-
               setIdKitFK(dados.idKitFK);
               setProdutorFK(dados.idProdutorFK);
               setCarrinhoFK(dados.idCarrinho);
             }
-            
-            
             setChart(response.data);
         })
     }, [idCliente]);
@@ -73,43 +63,26 @@ export default function ProfileClient(){
                 Authorization: idCliente,
             }
         }).then(response => {
-            console.log("pesquisando itens do carrinho..");
             setChartsProducts(response.data);
         })
     }, [idCliente])
 
-
-
-
-async function handleAddOrder() {
-  
+async function handleAddOrder() {  
   var texto = '{"idProdutorFK": "' +idProdutorFK+'", "idCarrinhoFK": "' +idCarrinhoFK+'", "idKit": '+idKitFK+'}';
   var cabecalho = JSON.parse(texto);
-  console.log(cabecalho);
-
+  
   try {
-
-    console.log("inclusão pedido no front")
-    
     const response = await api.post('orders', cabecalho, {
       headers:{
           Authorization: idCliente,
       }
     });
-    console.log(response.data);
-      
-    console.log("vortei");
-    //console.log(response.data);
-    
     alert('Pedido Gerado!');   
     history.push('/orders');
-
   } catch (error) {
     alert('Erro durante a inclusão do item no carrinho!');   
   }
 }
-
-
 
 function handleDeleteChart(id) {
     try {
@@ -125,34 +98,10 @@ function handleDeleteChart(id) {
     }
 }
 
-  function teste(variavel) {
-  alert(idKitFK);
-  alert(idProdutorFK);
-  }
-
-
-  
-    
-
-    function handleLogout() {
-        localStorage.clear()
-        history.push('/')
-    
+  function handleLogout() {
+    localStorage.clear()
+    history.push('/')
     }
-
-  
-
-    const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
-  
-    const handleOpen = () => {
-      setOpen(true);
-    };
-  
-    const handleClose = () => {
-      setOpen(false);
-    };
-
 
     return (
         <div className="chart-container">
@@ -162,7 +111,7 @@ function handleDeleteChart(id) {
 
   
                 <Link className="button" to="/profileClient">Home</Link>
-                <Link className="button" to="/orders">Visualizar Pedidos</Link>
+                <Link className="button" to="/ordersClient">Visualizar Pedidos</Link>
                 <button onClick={handleLogout} type="button">
                     <FiPower size={18} color="#E02041" />
                 </button>
@@ -180,7 +129,7 @@ function handleDeleteChart(id) {
                     <strong>Descrição: {chart.descricaoKit}</strong>
 
                     <strong>ID Produtor: {chart.idProdutorFK}</strong>
-                    <strong>Produtor: {chart.nome}</strong>
+                    <strong>Produtor: {chart.email}</strong>
                     <strong>CNPJ: {chart.cnpjProdutor}</strong>
                     
       

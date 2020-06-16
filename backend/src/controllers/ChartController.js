@@ -1,35 +1,25 @@
 //const mysql = require('../database/connectionMysql');
 const {query} = require('../database/connectionMysql');
 
-
 let idKitFK;
 let kit;
 idChartFK = 0;
 
-
 module.exports = {
     index(req, res){
-
-        //SELECT a.idCarrinho, b.idKitFK, c.descricaoKit, c.precoKit, c.idProdutorFK, d.nome, d.cnpjProdutor FROM carrinho AS a INNER JOIN carrinhoKit AS b ON a.idCarrinho = b.idCarrinhoFK INNER JOIN kit AS c ON b.idKitFK = c.idKit INNER JOIN produtor AS d ON d.idProdutor = c.idProdutorFK WHERE idClienteFK = 2
         const idCliente = req.headers.authorization;
-        console.log(idCliente);
-        console.log("called chart controller");
         let filter = '';
         if(idCliente) filter = ' WHERE a.idClienteFK = ' + parseInt(idCliente) + ' AND a.gerouPedido = 0  ';
-        console.log(filter);
-        query("SELECT a.idCarrinho, a.gerouPedido,a.idClienteFK, b.idKitFK, c.descricaoKit, c.precoKit, c.idProdutorFK, d.nome, d.cnpjProdutor FROM carrinho AS a INNER JOIN carrinhoKit AS b ON a.idCarrinho = b.idCarrinhoFK INNER JOIN kit AS c ON b.idKitFK = c.idKit INNER JOIN produtor AS d ON d.idProdutor = c.idProdutorFK" + filter, function (error, result, field) {
+        query("SELECT a.idCarrinho, a.gerouPedido,a.idClienteFK, b.idKitFK, c.descricaoKit, c.precoKit, c.idProdutorFK, d.email, d.cnpjProdutor FROM carrinho AS a INNER JOIN carrinhoKit AS b ON a.idCarrinho = b.idCarrinhoFK INNER JOIN kit AS c ON b.idKitFK = c.idKit INNER JOIN produtor AS d ON d.idProdutor = c.idProdutorFK" + filter, function (error, result, field) {
             if (error) {
                 res.json(error);
             } else {
-                console.log(result);
                 res.json(result);
             }
         });
     },
     indexProducts (req, res){
         const idCliente = req.headers.authorization;
-        console.log(idCliente);
-        console.log("called chart controller");
         let filter = '';
         if(idCliente) filter = ' WHERE idClienteFK=' + parseInt(idCliente) + ' AND a.gerouPedido = 0  ';
         query("SELECT d.idProdutoKit, e.descricao, e.caloria, e.precoUnit FROM carrinho AS a INNER JOIN carrinhoKit AS b ON a.idCarrinho = b.idCarrinhoFK INNER JOIN kit AS c ON b.idKitFK = c.idKit INNER JOIN produtoKit AS d ON d.idKitFK = c.idKit INNER JOIN produto AS e ON d.idProdutoFK = e.idProduto" + filter, function (error, result, field) {
@@ -42,10 +32,7 @@ module.exports = {
     },
 
     delete(req, res){
-        console.log("delete chart called");
         const idChart = req.params.idChart;
-        console.log(idChart);
-        //const ong_id = req.headers.authorization;
         let filter = '';
         if(idChart) filter = ' WHERE idCarrinho=' + parseInt(idChart);
         query("DELETE FROM carrinho" + filter, function (error, result, field) {

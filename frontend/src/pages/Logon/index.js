@@ -33,15 +33,11 @@ export default function Logon() {
         console.log(value);
         if(value == 'cliente'){
         try {
-            console.log("tentativa de login cliente...")
-            console.log(email);
-
                 const response = await api.post('sessions', data);
                 if(response.data == null){
                     alert('Email ou senha incorreta!')
                 }
-                else{
-                    
+                else{       
                     localStorage.setItem('idCliente', response.data[0].idCliente);
                     localStorage.setItem('emailCliente', response.data[0].email);
                     history.push('/profileClient');
@@ -49,13 +45,9 @@ export default function Logon() {
              
         } catch (error) {
             alert('Falha no login Cliente, tente novamente.')
-            
         }
         }else{
             try {
-                console.log("tentativa de login produtor...")
-                console.log(email);
-                
                     const response = await api.post('sessions', data);
                     if(response.data == null){
                         alert('Email ou senha incorreta!')
@@ -63,16 +55,13 @@ export default function Logon() {
                     else{
                         localStorage.setItem('idProdutor', response.data[0].idProdutor);
                         localStorage.setItem('emailProdutor', response.data[0].email);
-                        localStorage.setItem('tipoUsuario', response.data[0].value);
-                        
+                        localStorage.setItem('tipoUsuario', response.data[0].value);       
                         history.push('/ProfileProducer');
                     }
                  
             } catch (error) {
                 alert('Falha no login Produtor, tente novamente.')
-                
             }
-
         }
     }
     return(
@@ -85,7 +74,6 @@ export default function Logon() {
             </FormControl>
             <section className="form">
                 <img src={logoImg} alt="Hortafy"/>
-
                 <form onSubmit={handleLogin}>
                     <input placeholder="Email" 
                     value={email}
@@ -96,9 +84,6 @@ export default function Logon() {
                     onChange={e => setSenha(e.target.value)}
                     />  
                     <button className="buttonLogin" type="submit">Entrar</button>
-
-                    
-                    
                     <Link className="back-link-client" to="/registerClient">
                         <FiUser size={16} color="#59A52C" />
                         Quero ser cliente!

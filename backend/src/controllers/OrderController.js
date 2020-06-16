@@ -24,26 +24,25 @@ module.exports = {
     
     indexByClient(req, res){
         const idCliente = req.headers.authorization;
-        console.log(idCliente);
         console.log("called order controller");
         let filter = '';
         if(idCliente) filter = ' WHERE a.idClienteFK =' + parseInt(idCliente) + ' ORDER BY a.idPedido DESC';
-        query("SELECT a.idPedido, a.idClienteFK, a.statusPedido, b.idKitFK, c.descricaoKit, c.precoKit, c.idProdutorFK, d.nome, d.cnpjProdutor FROM pedido AS a INNER JOIN pedidoKit AS b ON a.idPedido = b.idPedidoFK INNER JOIN kit AS c ON b.idKitFK = c.idKit INNER JOIN produtor AS d ON d.idProdutor = c.idProdutorFK" + filter, function (error, result, field) {
+        query("SELECT a.idPedido, a.idClienteFK, a.statusPedido, b.idKitFK, c.descricaoKit, c.precoKit, c.idProdutorFK, d.email, d.cnpjProdutor FROM pedido AS a INNER JOIN pedidoKit AS b ON a.idPedido = b.idPedidoFK INNER JOIN kit AS c ON b.idKitFK = c.idKit INNER JOIN produtor AS d ON d.idProdutor = c.idProdutorFK" + filter, function (error, result, field) {
             if (error) {
-                console.log("erro");
                 res.json(error);
             } else {
-                console.log(result);
                 res.json(result);
             }
         });
     },
 
     indexByProducer(req, res){
+        const idProdutor = req.headers.authorization;
+        console.log(idProdutor);
+        console.log("called order producer controller");
         let filter = '';
-        const idProdutorFK = req.headers.authorization;
-        if(idProdutorFK) filter = ' WHERE idProdutorFK=' + parseInt(idProdutorFK);
-        query("SELECT * FROM pedido" + filter, function (error, result, field) { 
+        if(idProdutor) filter = ' WHERE a.idProdutorFK =' + parseInt(idProdutor) + ' ORDER BY a.idPedido DESC';
+        query("SELECT a.idPedido, a.idClienteFK, a.statusPedido, b.idKitFK, c.descricaoKit, c.precoKit, c.idProdutorFK, d.email, d.instituicaoCaridosa FROM pedido AS a INNER JOIN pedidoKit AS b ON a.idPedido = b.idPedidoFK INNER JOIN kit AS c ON b.idKitFK = c.idKit INNER JOIN cliente AS d ON a.idClienteFK = d.idCliente" + filter, function (error, result, field) {
             if (error) {
                 res.json(error);
             } else {
@@ -52,16 +51,17 @@ module.exports = {
         });
     },
 
+
+
     create(req, res){
         console.log("create order called");
-        console.log(req.body);
-
+        
         kit = req.body['idKit'];
         cabecalho = req.body;
 
         const idProdutorFK = cabecalho.idProdutorFK;
         const idCarrinhoFK = cabecalho.idCarrinhoFK;
-        console.log(idCarrinhoFK);
+        
 
         const statusPedido = "PENDENTE"
         
@@ -80,7 +80,6 @@ module.exports = {
                         ('${idPedidoFK}', '${kit}')`,
                         function (error, results, field) {
                         if (error) {
-                            console.log(results);
                             console.log(error);
                             console.log("Carrinho deu Erro!")
                         } else {
@@ -91,7 +90,6 @@ module.exports = {
 
                             function (error, results, field) {
                             if (error) {
-                                console.log(results);
                                 console.log(error);
                                 console.log("Pedido deu Erro!")
                             } else {
@@ -101,10 +99,31 @@ module.exports = {
                 }
             });    
              }
-         });
-                   
-      }
-    }
+         });       
+      },
+
+      status(req, res){
+        console.log("set status called")
+        console.log(req.body);
+        const status = req.body.status;
+        const idPedidoFK = req.body.idPedido;
+        filter = ' WHERE idPedido = ' + parseInt(idPedidoFK);
+        if(req.params.idPedidoFK) filter = ' WHERE idPedido=' + parseInt(req.params.idPedido);
+        query(`UPDATE pedido SET statusPedido = ('${status}')` + filter,
+        function (error, results, field) {
+            if (error) {
+                res.json(error);
+                console.log("Pedido status ruim");
+            } else {
+                console.log("Pedido deu buena");
+                res.json(results);
+            }
+        });
+    },
+      
+
+}
+    
             
         
 

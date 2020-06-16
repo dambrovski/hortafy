@@ -22,7 +22,7 @@
 .profile-container header a {
     width: 170px;
     margin-left: auto;
-    margin-top: 0;
+    margin-top: 0px;
 }
 
 .profile-container header button {
@@ -71,7 +71,7 @@
 
 .btnExpandir{
     margin-right: px;
-    margin-top: 80px;
+    margin-top: 50px;
 
     border: 0;
 }

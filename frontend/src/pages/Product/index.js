@@ -1,18 +1,13 @@
 import React, { useState } from 'react';
 import './styles.css';
-import logoImg from '../../assets/hortafy-logo.svg';
 import { Link, useHistory } from 'react-router-dom';
 import api from '../../services/api';
-import {FiArrowLeft} from 'react-icons/fi';
-
-
 
 export default function RegisterProduct(){
     const [descricao, setDescricao] = useState('');
     const [precoUnit, setPrecoUnit] = useState('');
     const [caloria, setCaloria] = useState('');
-    
-
+    const idProdutor = localStorage.getItem('idProdutor');
     const history = useHistory();
 
     async function handleRegister(e) {
@@ -25,22 +20,25 @@ export default function RegisterProduct(){
 
         };
         try {
-            console.log("called action");
+            console.log("called product post");
             console.log(data);
-            const response = await api.post('producers', data);
-            console.log(response.data);
-            
+            const response = await api.post('products', data   , {
+                headers:{
+                    Authorization: idProdutor,
+                }
+            });
+           
             if (response.data == true){
-                alert(`descricao já está cadastrado!.`);
+                alert(`Produto já está cadastrado!.`);
                 
             }
             else{
-                alert(`Produtor Cadastrado com sucesso! Você será redirecionado a tela inicial.`);
-                history.push('/');
+                alert(`Produto Cadastrado com sucesso! Você será redirecionado a tela inicial.`);
+                history.push('/profileProducer');
             }
 
         } catch (error) {
-            alert('Erro durante o cadastro do Produtor!');
+            alert('Erro durante o cadastro do Produto!');
             
         }
         
@@ -48,15 +46,12 @@ export default function RegisterProduct(){
     return(
         <div className="register-product-container">
             <div className="content">
-                
                 <form onSubmit={handleRegister}>
-
-
-                <Link className="buttonProfile" to="/products">Cadastrar Produtos</Link>
+                <Link className="buttonProfile" to="/profileProducer">Home</Link>
                 <Link className="buttonProfile" to="/kits">Cadastrar Kits</Link>
-                <Link className="buttonProfile" to="/orders">Gerenciar Pedidos</Link>
+                <Link className="buttonProfile" to="/ordersProducer">Gerenciar Pedidos</Link>
 
-                    <h1>CADASTRO DE PRODUTO</h1>
+                    <h1>CADASTRO DE PRODUTOS</h1>
       
                     <input placeholder="Descrição do Produto" 
                     value={descricao}

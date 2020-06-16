@@ -7,9 +7,11 @@ import RegisterProducer from './pages/RegisterProducer';
 import ProfileClient from './pages/ProfileClient';
 import ProfileProducer from './pages/ProfileProducer';
 import Chart from './pages/Chart';
-import Order from './pages/Order';
+import OrderClient from './pages/OrderClient';
+import OrderProducer from './pages/OrderProducer';
 import Product from './pages/Product';
-import NewIncident from './pages/NewIncident';
+import Kit from './pages/Kit';
+
 
 export default function Routes() {
     return(
@@ -21,10 +23,10 @@ export default function Routes() {
                 <Route path="/profileProducer" component={ProfileProducer} />
                 <Route path="/profileClient" component={ProfileClient} />
                 <Route path="/products" component={Product} />
+                <Route path="/kits" component={Kit} />
                 <Route path="/charts" component={Chart} />
-                <Route path="/orders" component={Order} />
-            
-                <Route path="/incidents/new" component={NewIncident} />
+                <Route path="/ordersProducer" component={OrderProducer} />
+                <Route path="/ordersClient" component={OrderClient} />
             </Switch>
         </BrowserRouter>
     )

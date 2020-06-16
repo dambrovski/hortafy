@@ -52,8 +52,20 @@ module.exports = {
     },
 
     create(req, res){
-        const {descricaoKit, precoKit} = req.body['cabecalho'];
-        produtos = req.body['produtos'];
+        console.log("create kit called");
+        
+        teste = req.body;
+        console.log("apresentando dados");
+        console.log(req.body);
+        const descricaoKit = teste.descricao;
+        console.log(descricaoKit);
+        const precoKit = teste.precoUnit;
+        console.log(precoKit);
+        produtos = teste.ProdutoKits;
+        console.log(produtos);
+
+        
+        console.log(precoKit);
         
         const idProdutorFK = req.headers.authorization;
         query(`INSERT INTO kit (descricaoKit, precoKit, idProdutorFK) VALUES 
@@ -67,7 +79,7 @@ module.exports = {
                 console.log(idKitFK);
                 for (let index = 0; index < produtos.length; index++) {
                     element = produtos[index];
-                    idProdutoFK = element.idProduto;
+                    idProdutoFK = element;
                    console.log(idProdutoFK);
                    query(`INSERT INTO produtoKit (idKitFK, idProdutoFK) VALUES
                    ('${idKitFK}', '${idProdutoFK}')`,

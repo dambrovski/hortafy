@@ -32,17 +32,27 @@ module.exports = {
     create(req, res){
         const {descricao, precoUnit, caloria} = req.body;
         const idProdutorFK = req.headers.authorization;
-        query(`INSERT INTO produto
-        (descricao, precoUnit, caloria, idProdutorFK) 
-        VALUES 
-        ('${descricao}', '${precoUnit}', '${caloria}', '${idProdutorFK}')`,
-        function (error, result, field) {
-            if (error) {
-                res.json(error);
-            } else {
-                res.json(result);
-            }
+        produtoExiste = true;
+        filter = " WHERE descricao= '" + descricao + "AND idProdutorFK = " + idProdutorFK;        
+        query("SELECT * FROM produto" + filter + "'", function (error, result, field) {
+        console.log(result);
+        if (result.length < 1){
+            query(`INSERT INTO produto
+            (descricao, precoUnit, caloria, idProdutorFK) 
+            VALUES 
+            ('${descricao}', '${precoUnit}', '${caloria}', '${idProdutorFK}')`,
+            function (error, result, field) {
+                if (error) {
+                    res.json(error);
+                } else {
+                    res.json(result);
+                }
+            })
+        }else{
+            console.log("produto existe na base");
+            produtoExiste = true;
+            res.json(produtoExiste);
+        }
         });
     }
 }
-    

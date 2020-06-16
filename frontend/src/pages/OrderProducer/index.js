@@ -5,7 +5,7 @@ import { Link, useHistory } from 'react-router-dom';
 
 import logoImg from '../../assets/hortafy-logo.svg';
 import {FiPower} from 'react-icons/fi'
-import {FiDelete} from 'react-icons/fi'
+
 
 import api from '../../services/api';
 
@@ -26,24 +26,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ProfileClient(){
+export default function OrderProducer(){
     const [orders, setOrder] = useState([]);
     
     
     const history = useHistory();
-    const idCliente = localStorage.getItem('idCliente');
-    const emailCliente = localStorage.getItem('emailCliente');
+    const idProdutor = localStorage.getItem('idProdutor');
+    const emailProdutor = localStorage.getItem('emailProdutor');
     
     useEffect(() =>{
-        api.get('orders/client', {
+        api.get('orders/producer', {
             headers:{
-                Authorization: idCliente,
+                Authorization: idProdutor,
             }
         }).then(response => {
             console.log("pesquisando pedidos..");
             setOrder(response.data);
         })
-    }, [idCliente]);
+    }, [idProdutor]);
 
 
 async function handleExpandKit(id) {
@@ -59,46 +59,23 @@ async function handleExpandKit(id) {
 }
 
 
-
-async function handleAdd(idKit) {
+function handleSetStatus(idPedido, status) {
   
-  var texto = '{"idClienteFK": "' +idCliente+'", "idKit": '+idKit+'}';
-  var cabecalho = JSON.parse(texto);
-  console.log(cabecalho);
-
   try {
-
-    console.log("inclusão kit carrinho no front")
-    
-    const response = await api.post('charts', cabecalho);
+    console.log("setando status do pedido")
+    console.log(idPedido, status);
+    const cabecalho = {idPedido, status};
+    const response = api.post('orders/status', cabecalho);
     console.log(response.data);
       
-    console.log("vortei");
+    alert('Status Atualizado Com Sucesso!');
+    history.push('/profileProducer')
     //console.log(response.data);
-    history.push('/chart');
 
   } catch (error) {
-    alert('Erro durante a inclusão do item no carrinho!');   
+    alert('Erro durante a alteração do status');   
   }
 }
-
-
-
-function handleDeleteChart(id) {
-    try {
-        api.delete(`charts/${id}`, {
-          headers: {
-              Authorization: idCliente,                  
-          }
-      });
-      alert('Carrinho deletado!.');
-      history.push('/profileClient');
-    } catch (error) {
-        alert('Erro ao deletar Carrinho, tente novamente.');
-    }
-}
-
-    
 
     function handleLogout() {
         localStorage.clear()
@@ -122,45 +99,44 @@ function handleDeleteChart(id) {
         <div className="chart-container">
             <header>
                 <img src={logoImg} alt=""/>
-                <span>Bem vindo(a), {emailCliente}!</span>
-
-  
-                <Link className="button" to="/profileClient">Home</Link>
-                <Link className="button" to="/charts">Visualizar Carrinho</Link>
+                <span>Bem vindo(a), {emailProdutor}!</span>
+                <Link className="button" to="/profileProducer">Home</Link>
+                <Link className="button" to="/products">Cadastrar Produtos</Link>
+                <Link className="button" to="/kits">Cadastrar Kits</Link>
                 <button onClick={handleLogout} type="button">
                     <FiPower size={18} color="#E02041" />
                 </button>
             </header>
 
-            <h1>Finalizar pedido:</h1>
-
+            <h1>Selecione o Status atual do pedido:</h1>
             <ul>
                 {orders.map(order => (
-                    
                     <li key={order.idPedido}>
-                    <strong>ID: {order.idPedido}</strong>
-                
-                    <strong> STATUS: {order.statusPedido}</strong>
-
-                    <strong>Produtor: {order.nome}</strong>
+                    <strong>ID PEDIDO: {order.idPedido}</strong>
+                    <strong>STATUS: {order.statusPedido}</strong>
+                    <strong>ID CLIENTE: {order.idClienteFK}</strong>
+                    <strong>EMAIL: {order.email}</strong>
                     <strong>KIT: {order.descricaoKit}</strong>
                     
                     <strong>
                       VALOR: {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL'}).format(order.precoKit)}
                     </strong>
 
-                    <button onClick={() => handleDeleteChart(order.idPedido)} type="button" >
-                        <FiDelete className='btnFi' size={30} color="#E02041"/>
+                    <button className='btnFiPendente' onClick={() => handleSetStatus(order.idPedido, "PENDENTE")} type="button" >
+                      PENDENTE
+                    </button>
+                    
+                    <button className='btnFiProcessamento' onClick={() => handleSetStatus(order.idPedido, "PROCESSAMENTO")} type="button" >
+                        PROCESSAMENTO
+                    </button>
+                    
+                    <button className='btnFiEntregue' onClick={() => handleSetStatus(order.idPedido, "ENTREGUE")} type="button" >
+                        ENTREGUE
                     </button>
                     
                 </li>   
                 ))}    
             </ul>  
-    
-
-        
-
         </div>
-        
     );
 }
