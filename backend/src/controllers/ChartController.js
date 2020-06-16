@@ -1,4 +1,3 @@
-//const mysql = require('../database/connectionMysql');
 const {query} = require('../database/connectionMysql');
 
 let idKitFK;
@@ -38,7 +37,6 @@ module.exports = {
         query("DELETE FROM carrinho" + filter, function (error, result, field) {
             if (error) {
                 console.log("deu erro");
-                //res.json(error);
             } else {
                 if(idChart) filter = ' WHERE idCarrinhoFK=' + parseInt(idChart);
                     query("DELETE FROM carrinhoKit;" + filter, function (error, result, field) {
@@ -47,23 +45,16 @@ module.exports = {
                     } else {
                         console.log("carrinho totalmente excluido")
                     }
-            });
+                });
             }
         });
         
     },
 
-
     create(req, res){
-        console.log("create chart called");
-        console.log(req.body);
-
         kit = req.body['idKit'];
         cabecalho = req.body['idClienteFK'];
         const idClienteFK = cabecalho;
-        
-        
-        
         let filter = '';
         if(idClienteFK) filter = ' WHERE idClienteFK=' + parseInt(idClienteFK) + ' AND gerouPedido = 0  ';
          query("SELECT * FROM carrinho" + filter, function (error, result, field) {
@@ -71,40 +62,31 @@ module.exports = {
                  res.json(error);
               } else {
                 const pedidoAtivo = result;
-                console.log("printando resultado da busca");
-                console.log(pedidoAtivo);
                 if(pedidoAtivo.length == 0){
-                query(`INSERT INTO carrinho (idClienteFK) VALUES 
-               ('${idClienteFK}')`,
-               function (error, result, field) {
-                    if (error) {
-                        res.json(error);
-                       console.log("noticia ruim");
-                   } else {
-                       res.json(result);
-                       idChartFK = result['insertId'];
-                       console.log(idChartFK);
-                       query(`INSERT INTO carrinhoKit (idCarrinhoFK, idKitFK) VALUES
-                        ('${idChartFK}', '${kit}')`,
-                        function (error, results, field) {
+                    query(`INSERT INTO carrinho (idClienteFK) VALUES 
+                    ('${idClienteFK}')`,
+                    function (error, result, field) {
                         if (error) {
-                            console.log(results);
-                            console.log(error);
-                            console.log("Carrinho deu Erro!")
+                            res.json(error);    
                         } else {
-                            console.log("Carrinho deu buena");
+                            res.json(result);
+                            idChartFK = result['insertId'];
+                            query(`INSERT INTO carrinhoKit (idCarrinhoFK, idKitFK) VALUES
+                            ('${idChartFK}', '${kit}')`,
+                            function (error, results, field) {
+                                if (error) {
+                                    console.log("Carrinho deu Erro!")
+                                } else {
+                                    console.log("Carrinho deu buena");
+                                }
+                            });
                         }
-                    });
-                   }
-                });       
-            }
-            else{
-                console.log("salve");
-             }
+                    });       
+                }
+                else{
+                    console.log("Revisar.");
+                }
             }
         });
-        }
     }
-
-   
-
+}

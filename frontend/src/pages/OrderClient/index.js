@@ -105,7 +105,7 @@ function handleLogout() {
                 </button>
             </header>
 
-            <h1>Finalizar pedido:</h1>
+            <h1>Acompanhar pedidos:</h1>
 
             <ul>
                 {orders.map(order => (

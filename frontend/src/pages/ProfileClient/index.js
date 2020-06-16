@@ -73,15 +73,15 @@ async function handleAddChart(idKit) {
 }
 
 async function handleAdd(idKit) {
-  console.log("incluir no carrinho")
   var texto = '{"idClienteFK": "' +idCliente+'", "idKit": '+idKit+'}';
   var cabecalho = JSON.parse(texto);
   console.log(cabecalho);
   
   try {
+    
     const response = await api.post('charts', cabecalho);
     console.log(response);
-    //history.push('/charts');
+    history.push('/charts');
   } catch (error) {
     alert('Erro durante a inclusão do item no carrinho!');   
   }

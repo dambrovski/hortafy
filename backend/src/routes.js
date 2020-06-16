@@ -9,7 +9,6 @@ const OrderController = require('./controllers/OrderController');
 const ChartController = require('./controllers/ChartController');
 const SessionController = require('./controllers/SessionController');
 
-
 const routes = express.Router();
 
 routes.get('/clients', ClientController.index);

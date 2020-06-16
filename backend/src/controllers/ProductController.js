@@ -1,7 +1,5 @@
 const {query} = require('../database/connectionMysql');
 
-const crypto = require('crypto');
-
 module.exports = {
 
     index(req, res){
@@ -35,7 +33,7 @@ module.exports = {
         produtoExiste = true;
         filter = " WHERE descricao= '" + descricao + "AND idProdutorFK = " + idProdutorFK;        
         query("SELECT * FROM produto" + filter + "'", function (error, result, field) {
-        console.log(result);
+            
         if (result.length < 1){
             query(`INSERT INTO produto
             (descricao, precoUnit, caloria, idProdutorFK) 
@@ -49,7 +47,6 @@ module.exports = {
                 }
             })
         }else{
-            console.log("produto existe na base");
             produtoExiste = true;
             res.json(produtoExiste);
         }

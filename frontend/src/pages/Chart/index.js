@@ -78,7 +78,7 @@ async function handleAddOrder() {
       }
     });
     alert('Pedido Gerado!');   
-    history.push('/orders');
+    history.push('/ordersClient');
   } catch (error) {
     alert('Erro durante a inclusão do item no carrinho!');   
   }

@@ -1,7 +1,6 @@
 const {query} = require('../database/connectionMysql');
 
 module.exports = {
-
     index(req, res){
         let filter = ''
         if(req.params.idCliente) filter = ' WHERE idCliente=' + parseInt(req.params.idCliente);
@@ -15,12 +14,10 @@ module.exports = {
     },
 
     create(req, res){
-        
         const {email, cartaoCredito, instituicaoCaridosa, admin, senha} = req.body;
         clienteExiste = true;
         filter = " WHERE email= '" + email;        
         query("SELECT * FROM cliente" + filter + "'", function (error, result, field) {
-            console.log(result);
             if (result.length < 1){
                 query(`INSERT INTO cliente 
                 (email, cartaoCredito, instituicaoCaridosa, admin, senha) 
@@ -30,22 +27,15 @@ module.exports = {
                     if (error) {
                         clienteExiste = true;
                         res.json(clienteExiste);
-                        
                     } else {
                         clienteExiste = false;
                         res.json(clienteExiste);
                     }
-            })
+                })
             } else {
-                console.log("existe na base");
                 clienteExiste = true;
                 res.json(clienteExiste);
-                
-                
-
             }
         });
-        
-
     }
 }
