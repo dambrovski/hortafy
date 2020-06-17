@@ -1,6 +1,7 @@
 const {query} = require('../database/connectionMysql');
+const Kit = require("../models/kit");
+let kit = new Kit;
 
-let idKitFK;
 produtos = [];
 idProdutoFK = 0;
 
@@ -31,8 +32,8 @@ module.exports = {
 
     indexByProducer(req, res){
         let filter = '';
-        const idProdutorFK = req.headers.authorization;
-        if(idProdutorFK) filter = ' WHERE idProdutorFK=' + parseInt(idProdutorFK);
+        kit.idProdutorFK = req.headers.authorization;
+        if(kit.idProdutorFK) filter = ' WHERE idProdutorFK=' + parseInt(kit.idProdutorFK);
         query("SELECT * FROM kit" + filter, function (error, result, field) { 
             if (error) {
                 res.json(error);
@@ -43,25 +44,25 @@ module.exports = {
     },
 
     create(req, res){  
-        teste = req.body;
-        const descricaoKit = teste.descricao;
-        const precoKit = teste.precoUnit;
-        produtos = teste.ProdutoKits;
+        console.log(req.body);
+        kit = req.body;
+        console.log(kit);
+        produtos = req.body.ProdutoKits;
+        console.log(produtos);
 
-        const idProdutorFK = req.headers.authorization;
         query(`INSERT INTO kit (descricaoKit, precoKit, idProdutorFK) VALUES 
-        ('${descricaoKit}', '${precoKit}','${idProdutorFK}')`,
+        ('${kit.descricaoKit}', '${kit.precoKit}','${req.headers.authorization}')`,
         function (error, result, field) {
             if (error) {
                 res.json(error);
             } else {
                 res.json(result);
-                idKitFK = result['insertId'];
+                kit.idKit = result['insertId'];
                 for (let index = 0; index < produtos.length; index++) {
                     element = produtos[index];
                     idProdutoFK = element;
                    query(`INSERT INTO produtoKit (idKitFK, idProdutoFK) VALUES
-                   ('${idKitFK}', '${idProdutoFK}')`,
+                   ('${kit.idKit}', '${idProdutoFK}')`,
                    function (error, results, field) {
                        if (error) {
                            console.log("revisar")

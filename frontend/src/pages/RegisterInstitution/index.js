@@ -8,16 +8,16 @@ import {FiArrowLeft} from 'react-icons/fi';
 
 
 export default function Register(){
-    const [email, setEmail] = useState('');
-    const [cnpj, setCnpj] = useState('');
+    const [emailInstituicao, setEmailInstituicao] = useState('');
+    const [cnpjInstituicao, setCnpjInstituicao] = useState('');
     const [senha, setSenha] = useState('');
     const history = useHistory();
 
     async function handleRegisterInstitution(e) {
         e.preventDefault();
         const data = {
-            email,
-            cnpj,
+            emailInstituicao,
+            cnpjInstituicao,
             senha,
         };
 
@@ -46,13 +46,13 @@ export default function Register(){
                 </section>
 
                     <input placeholder="CNPJ" 
-                    value={cnpj}
-                    onChange={e => setCnpj(e.target.value)}
+                    value={cnpjInstituicao}
+                    onChange={e => setCnpjInstituicao(e.target.value)}
                     />
                 
                     <input placeholder="Email" 
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
+                    value={emailInstituicao}
+                    onChange={e => setEmailInstituicao(e.target.value)}
                     />
 
                     <input placeholder="Senha" type="password" 

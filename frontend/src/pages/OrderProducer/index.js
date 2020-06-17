@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './styles.css';
-
 import { Link, useHistory } from 'react-router-dom';
-
 import logoImg from '../../assets/hortafy-logo.svg';
 import {FiPower} from 'react-icons/fi'
-
-
 import api from '../../services/api';
-
 import { makeStyles } from '@material-ui/core/styles';
-
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -59,12 +53,12 @@ async function handleExpandKit(id) {
 }
 
 
-function handleSetStatus(idPedido, status) {
+function handleSetStatus(idPedido, statusPedido) {
   
   try {
     console.log("setando status do pedido")
-    console.log(idPedido, status);
-    const cabecalho = {idPedido, status};
+    console.log(idPedido, statusPedido);
+    const cabecalho = {idPedido, statusPedido};
     const response = api.post('orders/status', cabecalho);
     console.log(response.data);
       
@@ -127,8 +121,8 @@ function handleSetStatus(idPedido, status) {
                     <button className='btnFiPendente' onClick={() => handleSetStatus(order.idPedido, "PENDENTE")} type="button" >
                       PENDENTE
                     </button>
-                    <button className='btnFiProcessamento' onClick={() => handleSetStatus(order.idPedido, "PROCESSAMENTO")} type="button" >
-                        PROCESSAMENTO
+                    <button className='btnFiProcessamento' onClick={() => handleSetStatus(order.idPedido, "ACEITO")} type="button" >
+                        ACEITO
                     </button>
                     <button className='btnFiEntregue' onClick={() => handleSetStatus(order.idPedido, "ENTREGUE")} type="button" >
                         ENTREGUE
@@ -150,8 +144,8 @@ function handleSetStatus(idPedido, status) {
                           <button className='btnFiPendente' onClick={() => handleSetStatus(order.idPedido, "PENDENTE")} type="button" >
                             PENDENTE
                           </button>
-                          <button className='btnFiProcessamento' onClick={() => handleSetStatus(order.idPedido, "PROCESSAMENTO")} type="button" >
-                              PROCESSAMENTO
+                          <button className='btnFiProcessamento' onClick={() => handleSetStatus(order.idPedido, "ACEITO")} type="button" >
+                              ACEITO
                           </button>
                           <button className='btnFiEntregue' onClick={() => handleSetStatus(order.idPedido, "ENTREGUE")} type="button" >
                               ENTREGUE

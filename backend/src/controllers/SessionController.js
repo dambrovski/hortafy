@@ -1,4 +1,7 @@
 const {query} = require('../database/connectionMysql');
+const Session = require("../models/session");
+
+let session = new Session;
 
 module.exports = {    
     index(req, res){
@@ -14,11 +17,10 @@ module.exports = {
     },
 
     create(req, res){
-        const {email,senha,value} = req.body;
-        console.log(email,senha,value);
-        filter = value + " WHERE email" + value + "='";
+        session = req.body;
+        filter = session.value + " WHERE email" + session.value + "='";
         console.log(filter);
-        query("SELECT * FROM " + filter + email + "'" + "AND senha='" + senha + "'", function (error, result, field) {
+        query("SELECT * FROM " + filter + session.email + "'" + "AND senha='" + session.senha + "'", function (error, result, field) {
             console.log(result);
             if (result.length < 1) {
                     res.json(error);
@@ -28,4 +30,3 @@ module.exports = {
         });
     }
 }
-      

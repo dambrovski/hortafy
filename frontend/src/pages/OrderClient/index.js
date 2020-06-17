@@ -3,7 +3,6 @@ import './styles.css';
 import { Link, useHistory } from 'react-router-dom';
 import logoImg from '../../assets/hortafy-logo.svg';
 import {FiPower} from 'react-icons/fi'
-import {FiDelete} from 'react-icons/fi'
 import api from '../../services/api';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -21,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ProfileClient(){
+export default function OrderClient(){
     const [orders, setOrder] = useState([]);    
     const history = useHistory();
     const idCliente = localStorage.getItem('idCliente');
@@ -45,7 +44,6 @@ export default function ProfileClient(){
             setOrder(response.data);
         })
     }, [idCliente]);
-//16062020
 
 async function handleExpandKit(id) {
     try {

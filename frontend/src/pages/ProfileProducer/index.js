@@ -117,9 +117,6 @@ async function handleAdd(idKit) {
                 {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL'}).format(kit.precoKit)}
                     </strong>
 
-                    <button onClick={() => handleAdd(kit.idKit)} type="button" >
-                        <FiEdit className="btnFi" size={30} color="#59A52C"/>
-                    </button>
                     </li>   
                   ))}    
             </ul>

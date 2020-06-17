@@ -1,4 +1,6 @@
 const {query} = require('../database/connectionMysql');
+const Client = require("../models/client");
+let cliente = new Client;
 
 module.exports = {
     index(req, res){
@@ -14,15 +16,16 @@ module.exports = {
     },
 
     create(req, res){
-        const {email, cartaoCredito, senha} = req.body;
+        cliente = req.body;
         clienteExiste = true;
-        filter = " WHERE email= '" + email;        
+ 
+        filter = " WHERE emailCliente= '" + cliente.emailCliente;        
         query("SELECT * FROM cliente" + filter + "'", function (error, result, field) {
             if (result.length < 1){
                 query(`INSERT INTO cliente 
-                (email, cartaoCredito, senha) 
+                (emailCliente, cartaoCredito, senha) 
                 VALUES 
-                ('${email}', '${cartaoCredito}', '${senha}')`,
+                ('${cliente.emailCliente}', '${cliente.cartaoCredito}', '${cliente.senha}')`,
                 function (error, result, field) {
                     if (error) {
                         clienteExiste = true;

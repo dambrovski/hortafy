@@ -6,18 +6,17 @@ import api from '../../services/api';
 import {FiArrowLeft} from 'react-icons/fi';
 
 
-
 export default function Register(){
-    const [email, setEmail] = useState('');
-    const [cnpj, setCnpj] = useState('');
+    const [emailProdutor, setEmailProdutor] = useState('');
+    const [cnpjProdutor, setCnpjProdutor] = useState('');
     const [senha, setSenha] = useState('');
     const history = useHistory();
 
     async function handleRegister(e) {
         e.preventDefault();
         const data = {
-            email,
-            cnpj,
+            emailProdutor,
+            cnpjProdutor,
             senha,
         };
 
@@ -46,13 +45,13 @@ export default function Register(){
                 </section>
 
                     <input placeholder="CNPJ" 
-                    value={cnpj}
-                    onChange={e => setCnpj(e.target.value)}
+                    value={cnpjProdutor}
+                    onChange={e => setCnpjProdutor(e.target.value)}
                     />
                 
                     <input placeholder="Email" 
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
+                    value={emailProdutor}
+                    onChange={e => setEmailProdutor(e.target.value)}
                     />
 
                     <input placeholder="Senha" type="password" 

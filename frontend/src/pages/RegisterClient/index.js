@@ -6,7 +6,7 @@ import api from '../../services/api';
 import {FiArrowLeft} from 'react-icons/fi';
 
 export default function RegisterClient(){
-    const [email, setEmail] = useState('');
+    const [emailCliente, setEmailCliente] = useState('');
     const [senha, setSenha] = useState('');
     const history = useHistory();
 
@@ -14,11 +14,12 @@ export default function RegisterClient(){
         e.preventDefault();
         
         const data = {
-            email,
+            emailCliente,
             senha,
         };
 
         try {
+            console.log(emailCliente);
             const response = await api.post('clients', data);
 
             if (response.data == true){
@@ -36,7 +37,7 @@ export default function RegisterClient(){
         <div className="register-container">
             <div className="content">
                 <section>
-                    <img src={logoImg} alt="Be The Hero"/>
+                    <img src={logoImg} alt="Hortafy"/>
                     <h1>Cadastro de Cliente</h1>
                     <p>Faça seu cadastro, e comece já a mudança em sua alimentação hoje mesmo!.</p>
 
@@ -47,8 +48,8 @@ export default function RegisterClient(){
                 </section>
                 <form onSubmit={handleRegister}>
                     <input placeholder="Email" 
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
+                    value={emailCliente}
+                    onChange={e => setEmailCliente(e.target.value)}
                     />
 
                     <input placeholder="Senha" type="password" 

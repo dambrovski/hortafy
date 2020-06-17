@@ -10,8 +10,8 @@ import {FiPlus} from 'react-icons/fi'
 
 
 export default function RegisterProduct(){
-    const [descricao, setDescricao] = useState('');
-    const [precoUnit, setPrecoUnit] = useState('');
+    const [descricaoKit, setDescricaoKit] = useState('');
+    const [precoKit, setPrecoKit] = useState('');
     const [selectValue, setSelectValue] = useState('');  
     const idProdutor = localStorage.getItem('idProdutor');
     const [products, setProducts] = useState([]);
@@ -53,8 +53,8 @@ export default function RegisterProduct(){
         e.preventDefault();
         
         const data = {
-            descricao,
-            precoUnit,
+            descricaoKit,
+            precoKit,
             ProdutoKits,
 
         };
@@ -95,14 +95,14 @@ export default function RegisterProduct(){
                     <h1>CADASTRO DE KITS</h1>
       
                     <input placeholder="Descrição do Kit" 
-                    value={descricao}
-                    onChange={e => setDescricao(e.target.value)}
+                    value={descricaoKit}
+                    onChange={e => setDescricaoKit(e.target.value)}
                     />
 
 
                     <input placeholder="Preço do Kit"  type="number"
-                    value={precoUnit}
-                    onChange={e => setPrecoUnit(e.target.value)}
+                    value={precoKit}
+                    onChange={e => setPrecoKit(e.target.value)}
                     />
  
                     <div>
@@ -122,8 +122,6 @@ export default function RegisterProduct(){
 
                     </div>
 
-                                   
-              
                     <button className="buttonRegisterKit" type="submit">Cadastrar</button>                   
                 </form>
                 

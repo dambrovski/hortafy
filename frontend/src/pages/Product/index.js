@@ -15,7 +15,7 @@ export default function RegisterProduct(){
         
         const data = {
             descricao,
-            precoUnit,
+            precoUnit,  
             caloria,
 
         };
